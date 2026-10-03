@@ -1,0 +1,104 @@
+{
+  "environment": {
+    "node": "v22.23.2",
+    "platform": "linux",
+    "architecture": "x64"
+  },
+  "sourceVersion": "2026-10-03",
+  "scope": "Real JMdict vocabulary subsets; isolated Node process per size. This is not a full JMdict/browser benchmark. Deck measures the engine's filter/shuffle operations; browser startup/rendering measured separately for the bundled release.",
+  "excludedUnsupportedEntries": 20,
+  "results": [
+    {
+      "entries": 1000,
+      "loadMs": 36.71818400000001,
+      "validationMs": 10.091381000000013,
+      "indexMs": 156.867929,
+      "searchMs": [
+        0.4678929999999468,
+        0.023264999999980773,
+        0.03242899999997917,
+        0.05271900000002461,
+        0.021893000000034135,
+        0.023085000000037326
+      ],
+      "filterMs": 0.31832800000000816,
+      "deckMs": 0.7372860000000401,
+      "heapMiB": 31.583763122558594,
+      "rssMiB": 113.73046875
+    },
+    {
+      "entries": 5000,
+      "loadMs": 213.18543,
+      "validationMs": 42.33022399999999,
+      "indexMs": 360.71167199999996,
+      "searchMs": [
+        0.3089940000000979,
+        0.015514000000052874,
+        0.029814999999985048,
+        0.1147720000000163,
+        0.061092000000030566,
+        0.01916900000003352
+      ],
+      "filterMs": 3.9862909999999374,
+      "deckMs": 1.62151300000005,
+      "heapMiB": 67.35218048095703,
+      "rssMiB": 167.89453125
+    },
+    {
+      "entries": 10000,
+      "loadMs": 374.750587,
+      "validationMs": 80.40022399999998,
+      "indexMs": 954.2022929999999,
+      "searchMs": [
+        0.4360739999999623,
+        0.02884300000005169,
+        0.0586479999999483,
+        0.26682099999993625,
+        0.28479799999990973,
+        0.043304999999918437
+      ],
+      "filterMs": 2.6089039999999386,
+      "deckMs": 5.403968999999961,
+      "heapMiB": 111.8037338256836,
+      "rssMiB": 216.078125
+    },
+    {
+      "entries": 25000,
+      "loadMs": 911.257548,
+      "validationMs": 170.6643489999999,
+      "indexMs": 2805.9145959999996,
+      "searchMs": [
+        0.5816620000000512,
+        0.030886000000009517,
+        0.1083320000002459,
+        1.0629439999997885,
+        1.1942420000000311,
+        0.04978499999970154
+      ],
+      "filterMs": 8.50861599999962,
+      "deckMs": 10.0540960000003,
+      "heapMiB": 274.4850540161133,
+      "rssMiB": 379.67578125
+    },
+    {
+      "entries": 50000,
+      "loadMs": 1141.892899,
+      "validationMs": 308.35891100000003,
+      "indexMs": 6751.382731,
+      "searchMs": [
+        0.9627850000015314,
+        0.10347600000022794,
+        0.16887300000053074,
+        1.8317389999992884,
+        1.4852780000001076,
+        0.04727100000127393
+      ],
+      "filterMs": 11.55454699999973,
+      "deckMs": 19.14748900000086,
+      "heapMiB": 600.1920394897461,
+      "rssMiB": 711.13671875
+    }
+  ],
+  "preparationAndMeasurementsMs": 30572.474599999998,
+  "notes": "Single cold-process observation per size, not statistical p95; benchmark totals include adapter preparation and child measurements. Full-source benchmark not claimed."
+}

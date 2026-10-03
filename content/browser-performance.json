@@ -1,0 +1,18 @@
+{
+  "scope": "Production 3347-entry release, headless Chromium; search-to-two-animation-frames includes rendering and frame scheduling, single observation per query.",
+  "searchToTwoFramesMs": [
+    32.39999999990687,
+    287.70000000018626,
+    59.700000000186265
+  ],
+  "heapMiB": 57.364014625549316,
+  "runtimeErrors": [],
+  "externalRequests": [],
+  "coldNavigation": {
+    "domContentLoadedMs": 550.6000000000931,
+    "loadEventMs": 551,
+    "heapMiB": 17.814186096191406,
+    "locale": "en-US"
+  },
+  "coldNavigationScope": "Fresh Chromium profile and first production navigation, before onboarding; application/catalog modules are loaded. Local static server, one observation."
+}

@@ -1,0 +1,41 @@
+name: Manabu reliability
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      public_distribution:
+        description: Check public distribution permission (currently blocked)
+        type: boolean
+        default: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify
+      - name: Public distribution permission gate
+        if: github.event_name == 'workflow_dispatch' && inputs.public_distribution
+        run: pnpm content:validate --distribution
+      - name: Chromium interaction regressions
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          MANABU_TEST_URL: http://localhost:3000
+        run: |
+          pnpm dev --host 127.0.0.1 --port 3000 > /tmp/manabu-vite.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://localhost:3000/ > /dev/null
+          pnpm test:browser

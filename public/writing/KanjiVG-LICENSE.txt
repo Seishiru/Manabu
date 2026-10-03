@@ -1,0 +1,20 @@
+Copyright (C) 2009/2010/2011 Ulrich Apel.
+This work is distributed under the conditions of the Creative Commons
+Attribution-Share Alike 3.0 Licence. This means you are free:
+* to Share - to copy, distribute and transmit the work
+* to Remix - to adapt the work
+
+Under the following conditions:
+* Attribution. You must attribute the work by stating your use of KanjiVG in
+  your own copyright header and linking to KanjiVG's website
+  (http://kanjivg.tagaini.net)
+* Share Alike. If you alter, transform, or build upon this work, you may
+  distribute the resulting work only under the same or similar license to this
+  one.
+
+See http://creativecommons.org/licenses/by-sa/3.0/ for more details.
+
+Kana and kanji stroke paths from KanjiVG, © Ulrich Apel and contributors, licensed CC BY-SA 3.0. Paths and number positions are extracted from the pinned SVG files. Multi-kana diagrams scale and position those paths; the derived geometry remains CC BY-SA 3.0.
+Source revision: 70a0b7ae0c18ceb5cb358274b029cce0234a43bc
+Website: https://kanjivg.tagaini.net/
+Licence: https://creativecommons.org/licenses/by-sa/3.0/

@@ -1,0 +1,43 @@
+{
+  "name": "figma-make-app",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "writing:prepare": "node scripts/import-kana-strokes.mjs",
+    "content:import": "node --experimental-strip-types scripts/import-dictionaries.ts",
+    "content:test": "node --test tests/content-release.test.cjs tests/japanese-keyboard.test.cjs",
+    "content:validate": "node --experimental-strip-types scripts/validate-content.ts",
+    "verify": "pnpm typecheck && pnpm content:validate && pnpm test && pnpm build",
+    "release:check": "pnpm content:validate --distribution && pnpm verify",
+    "test": "node --test tests/*.test.cjs",
+    "typecheck": "tsc --noEmit",
+    "test:browser": "node tests/browser-reliability.cjs",
+    "content:benchmark": "node --experimental-strip-types scripts/benchmark-content.ts",
+    "dictionary:build": "node --experimental-strip-types scripts/build-dictionary-dataset.ts",
+    "dictionary:validate": "node --experimental-strip-types scripts/validate-dictionary-dataset.ts",
+    "dictionary:benchmark": "node --experimental-strip-types scripts/benchmark-dictionary.ts",
+    "content:prepare": "node --experimental-strip-types scripts/prepare-content.ts",
+    "dev": "vite",
+    "build": "vite build && node scripts/version-offline-cache.mjs",
+    "preview": "vite preview",
+    "format": "oxfmt"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.18.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "fast-xml-parser": "^5.11.2",
+    "oxfmt": "^0.2.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.5"
+  }
+}

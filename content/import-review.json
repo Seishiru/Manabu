@@ -1,0 +1,139 @@
+{
+  "selection": "1000 words: original reviewed 16 plus source ichi1/news1/spec1/gai1 priority flags, in source traversal order; no JLPT or rank inferred.",
+  "kanjiSelection": "School grades 1–8 with English meanings and Japanese readings.",
+  "reviewedPrototypeMappings": {
+    "taberu": "1358280",
+    "nomimono": "1600430",
+    "shokuji": "1358490",
+    "nihon": "1582710",
+    "gakkou": "1206730",
+    "tanoshii": "1207240",
+    "iku": "1578850",
+    "tabemono": "1358340",
+    "shokudou": "1358550",
+    "mizu": "1371260",
+    "neko": "1467640",
+    "arigatou": "1586820",
+    "koohii": "1049180",
+    "choushoku": "1428390",
+    "yuushoku": "1542730",
+    "komorebi": "1593440"
+  },
+  "excludedForReview": [
+    {
+      "source": "jmdict",
+      "id": "1001090",
+      "reason": "Unsupported kana: う～ん"
+    },
+    {
+      "source": "jmdict",
+      "id": "1001140",
+      "reason": "Unsupported kana: え〜"
+    },
+    {
+      "source": "jmdict",
+      "id": "1001150",
+      "reason": "Unsupported kana: え〜と"
+    },
+    {
+      "source": "jmdict",
+      "id": "1006610",
+      "reason": "Incomplete kana: そっ"
+    },
+    {
+      "source": "jmdict",
+      "id": "1007910",
+      "reason": "Incomplete kana: チラッチラッ"
+    },
+    {
+      "source": "jmdict",
+      "id": "1023100",
+      "reason": "Unsupported kana: インタヴュー"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_4ee5",
+      "reason": "Unsupported gemination: もっ.て"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_62bc",
+      "reason": "Unsupported gemination: お.っ-"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_5408",
+      "reason": "Incomplete kana: ガッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_4e09",
+      "reason": "Unsupported gemination: みっ.つ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_56db",
+      "reason": "Unsupported gemination: よっ.つ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_5341",
+      "reason": "Incomplete kana: ジッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_65e9",
+      "reason": "Incomplete kana: サッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_5352",
+      "reason": "Unsupported gemination: そっ.する"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_7d0d",
+      "reason": "Incomplete kana: ナッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_516b",
+      "reason": "Unsupported gemination: やっ.つ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_7f70",
+      "reason": "Unsupported gemination: ばっ.する"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_6cd5",
+      "reason": "Incomplete kana: ハッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_574a",
+      "reason": "Incomplete kana: ボッ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_6b32",
+      "reason": "Unsupported gemination: ほっ.する"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_516d",
+      "reason": "Unsupported gemination: むっ.つ"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_62c9",
+      "reason": "Unsupported gemination: らっ.する"
+    },
+    {
+      "source": "kanjidic2",
+      "id": "ucs_9b31",
+      "reason": "Unsupported gemination: うっ.する"
+    }
+  ]
+}

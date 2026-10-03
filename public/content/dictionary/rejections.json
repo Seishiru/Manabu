@@ -1,0 +1,934 @@
+[
+  {
+    "entSeq": "1000000",
+    "reason": "Unsupported kana: ヽ"
+  },
+  {
+    "entSeq": "1000010",
+    "reason": "Unsupported kana: ヾ"
+  },
+  {
+    "entSeq": "1000020",
+    "reason": "Unsupported kana: ゝ"
+  },
+  {
+    "entSeq": "1000030",
+    "reason": "Unsupported kana: ゞ"
+  },
+  {
+    "entSeq": "1001090",
+    "reason": "Unsupported kana: う～ん"
+  },
+  {
+    "entSeq": "1001140",
+    "reason": "Unsupported kana: え〜"
+  },
+  {
+    "entSeq": "1001150",
+    "reason": "Unsupported kana: え〜と"
+  },
+  {
+    "entSeq": "1006610",
+    "reason": "Incomplete kana: そっ"
+  },
+  {
+    "entSeq": "1007910",
+    "reason": "Incomplete kana: チラッチラッ"
+  },
+  {
+    "entSeq": "1010410",
+    "reason": "Incomplete kana: パチッ"
+  },
+  {
+    "entSeq": "1023100",
+    "reason": "Unsupported kana: インタヴュー"
+  },
+  {
+    "entSeq": "1023110",
+    "reason": "Unsupported kana: インタヴュアー"
+  },
+  {
+    "entSeq": "1077410",
+    "reason": "Incomplete kana: チェッ"
+  },
+  {
+    "entSeq": "1105800",
+    "reason": "Unsupported kana: ヴュー"
+  },
+  {
+    "entSeq": "1105920",
+    "reason": "Unsupported kana: ヴューポイント"
+  },
+  {
+    "entSeq": "1111010",
+    "reason": "Incomplete kana: ふふっ"
+  },
+  {
+    "entSeq": "1145760",
+    "reason": "Unsupported kana: レヴュー"
+  },
+  {
+    "entSeq": "1160300",
+    "reason": "Unsupported kana: いのなかのかわず、たいかいをしらず"
+  },
+  {
+    "entSeq": "1374550",
+    "reason": "Unsupported kana: すご〜い"
+  },
+  {
+    "entSeq": "1404975",
+    "reason": "Unsupported gemination: はっやい"
+  },
+  {
+    "entSeq": "1565440",
+    "reason": "Incomplete kana: ああっ"
+  },
+  {
+    "entSeq": "1607150",
+    "reason": "Unsupported long vowel: ー"
+  },
+  {
+    "entSeq": "1631950",
+    "reason": "Incomplete kana: ざあっ"
+  },
+  {
+    "entSeq": "2002810",
+    "reason": "Incomplete kana: うっ"
+  },
+  {
+    "entSeq": "2002970",
+    "reason": "Incomplete kana: ギョッ"
+  },
+  {
+    "entSeq": "2003620",
+    "reason": "Incomplete kana: パッ"
+  },
+  {
+    "entSeq": "2004010",
+    "reason": "Incomplete kana: わっ"
+  },
+  {
+    "entSeq": "2026870",
+    "reason": "Incomplete kana: すっ"
+  },
+  {
+    "entSeq": "2029110",
+    "reason": "Unsupported kana: な〜"
+  },
+  {
+    "entSeq": "2036430",
+    "reason": "Incomplete kana: えいやっ"
+  },
+  {
+    "entSeq": "2036780",
+    "reason": "Incomplete kana: ギンッ"
+  },
+  {
+    "entSeq": "2061250",
+    "reason": "Unsupported kana: うわ〜"
+  },
+  {
+    "entSeq": "2069620",
+    "reason": "Incomplete kana: はあっ"
+  },
+  {
+    "entSeq": "2077870",
+    "reason": "Incomplete kana: かしゃっ"
+  },
+  {
+    "entSeq": "2080400",
+    "reason": "Incomplete kana: ゴーっ"
+  },
+  {
+    "entSeq": "2084200",
+    "reason": "Unsupported kana: デジャヴュ"
+  },
+  {
+    "entSeq": "2087950",
+    "reason": "Incomplete kana: わあっ"
+  },
+  {
+    "entSeq": "2088980",
+    "reason": "Incomplete kana: がさっ"
+  },
+  {
+    "entSeq": "2088990",
+    "reason": "Unsupported kana: はい、はい"
+  },
+  {
+    "entSeq": "2093200",
+    "reason": "Unsupported kana: シークヮーサー"
+  },
+  {
+    "entSeq": "2097670",
+    "reason": "Incomplete kana: めっ"
+  },
+  {
+    "entSeq": "2101840",
+    "reason": "Incomplete kana: ガシャッ"
+  },
+  {
+    "entSeq": "2112580",
+    "reason": "Unsupported kana: かもめ〜る"
+  },
+  {
+    "entSeq": "2118720",
+    "reason": "Incomplete kana: さくっ"
+  },
+  {
+    "entSeq": "2121700",
+    "reason": "Incomplete kana: ピシャッピシャッ"
+  },
+  {
+    "entSeq": "2143920",
+    "reason": "Incomplete kana: しーっ"
+  },
+  {
+    "entSeq": "2147960",
+    "reason": "Unsupported kana: モワァ〜ン"
+  },
+  {
+    "entSeq": "2151700",
+    "reason": "Incomplete kana: ゲッ"
+  },
+  {
+    "entSeq": "2152790",
+    "reason": "Unsupported kana: らくはくのたね、くはらくのたね"
+  },
+  {
+    "entSeq": "2183440",
+    "reason": "Ambiguous gemination: めっっちゃ"
+  },
+  {
+    "entSeq": "2183450",
+    "reason": "Unsupported kana: ブルータス、おまえもか"
+  },
+  {
+    "entSeq": "2192340",
+    "reason": "Incomplete kana: ポチッ"
+  },
+  {
+    "entSeq": "2194050",
+    "reason": "Incomplete kana: えっ"
+  },
+  {
+    "entSeq": "2196870",
+    "reason": "Incomplete kana: ほっほっほっ"
+  },
+  {
+    "entSeq": "2197960",
+    "reason": "Incomplete kana: ぶほっ"
+  },
+  {
+    "entSeq": "2202280",
+    "reason": "Incomplete kana: プチッ"
+  },
+  {
+    "entSeq": "2216210",
+    "reason": "Incomplete kana: それっ"
+  },
+  {
+    "entSeq": "2223020",
+    "reason": "Incomplete kana: ウフッ"
+  },
+  {
+    "entSeq": "2225490",
+    "reason": "Incomplete kana: ガクッ"
+  },
+  {
+    "entSeq": "2230770",
+    "reason": "Incomplete kana: ビビビッ"
+  },
+  {
+    "entSeq": "2242000",
+    "reason": "Incomplete kana: クックックッ"
+  },
+  {
+    "entSeq": "2255640",
+    "reason": "Incomplete kana: チュッ"
+  },
+  {
+    "entSeq": "2260130",
+    "reason": "Incomplete kana: いたっ"
+  },
+  {
+    "entSeq": "2261890",
+    "reason": "Incomplete kana: ギロッ"
+  },
+  {
+    "entSeq": "2322590",
+    "reason": "Unsupported gemination: ピアアドレシッング"
+  },
+  {
+    "entSeq": "2394370",
+    "reason": "Incomplete kana: あっ"
+  },
+  {
+    "entSeq": "2395940",
+    "reason": "Incomplete kana: しっ"
+  },
+  {
+    "entSeq": "2417290",
+    "reason": "Unsupported kana: こうもんのとら、ぜんもんのおおかみ"
+  },
+  {
+    "entSeq": "2417520",
+    "reason": "Unsupported kana: さいし、さいにたおれる"
+  },
+  {
+    "entSeq": "2417950",
+    "reason": "Unsupported kana: かてばかんぐん、まければぞくぐん"
+  },
+  {
+    "entSeq": "2418000",
+    "reason": "Unsupported kana: しょうねんよ、たいしをいだけ"
+  },
+  {
+    "entSeq": "2418570",
+    "reason": "Unsupported kana: うめよ、ふえよ、ちにみてよ"
+  },
+  {
+    "entSeq": "2418650",
+    "reason": "Unsupported kana: むかしはむかし、いまはいま"
+  },
+  {
+    "entSeq": "2418870",
+    "reason": "Unsupported kana: おおきにおせわ、おちゃでもあがれ"
+  },
+  {
+    "entSeq": "2419720",
+    "reason": "Unsupported kana: きくはいっときのはじ、きかぬはまつだいのはじ"
+  },
+  {
+    "entSeq": "2419910",
+    "reason": "Unsupported kana: とうはいったんのはじ、とわぬはまつだいのはじ"
+  },
+  {
+    "entSeq": "2419950",
+    "reason": "Unsupported kana: ゆうべんはぎん、ちんもくはきん"
+  },
+  {
+    "entSeq": "2423340",
+    "reason": "Incomplete kana: ごぼっ"
+  },
+  {
+    "entSeq": "2424520",
+    "reason": "Unsupported kana: さるものはおわず、きたるものはこばまず"
+  },
+  {
+    "entSeq": "2429140",
+    "reason": "Unsupported kana: かれをしりおのれをしれば、ひゃくせんあやうからず"
+  },
+  {
+    "entSeq": "2454110",
+    "reason": "Incomplete kana: すっすっ"
+  },
+  {
+    "entSeq": "2491210",
+    "reason": "Incomplete kana: そーれっ"
+  },
+  {
+    "entSeq": "2509440",
+    "reason": "Incomplete kana: ボカッ"
+  },
+  {
+    "entSeq": "2520820",
+    "reason": "Incomplete kana: すいっ"
+  },
+  {
+    "entSeq": "2520830",
+    "reason": "Incomplete kana: ずいっ"
+  },
+  {
+    "entSeq": "2523940",
+    "reason": "Incomplete kana: ひゅーっ"
+  },
+  {
+    "entSeq": "2539350",
+    "reason": "Incomplete kana: アーッ"
+  },
+  {
+    "entSeq": "2558020",
+    "reason": "Incomplete kana: フッ"
+  },
+  {
+    "entSeq": "2563590",
+    "reason": "Incomplete kana: ピュウッ"
+  },
+  {
+    "entSeq": "2564200",
+    "reason": "Unsupported kana: ぐゎー"
+  },
+  {
+    "entSeq": "2564800",
+    "reason": "Incomplete kana: ひっ"
+  },
+  {
+    "entSeq": "2570040",
+    "reason": "Unsupported kana: あさやけはあめ、ゆうやけははれ"
+  },
+  {
+    "entSeq": "2586180",
+    "reason": "Incomplete kana: シュッシュッ"
+  },
+  {
+    "entSeq": "2637260",
+    "reason": "Incomplete kana: ハンボッ"
+  },
+  {
+    "entSeq": "2684720",
+    "reason": "Incomplete kana: ポトッ"
+  },
+  {
+    "entSeq": "2698210",
+    "reason": "Incomplete kana: ぶっ"
+  },
+  {
+    "entSeq": "2699960",
+    "reason": "Incomplete kana: プチュッ"
+  },
+  {
+    "entSeq": "2700040",
+    "reason": "Incomplete kana: ビュッ"
+  },
+  {
+    "entSeq": "2701760",
+    "reason": "Incomplete kana: てへっ"
+  },
+  {
+    "entSeq": "2708100",
+    "reason": "Unsupported kana: シマウヮー"
+  },
+  {
+    "entSeq": "2708140",
+    "reason": "Unsupported kana: ぜんもんのとら、こうもんのおおかみ"
+  },
+  {
+    "entSeq": "2713040",
+    "reason": "Unsupported gemination: ボン・キュッ・ボン"
+  },
+  {
+    "entSeq": "2727750",
+    "reason": "Incomplete kana: ブーッ"
+  },
+  {
+    "entSeq": "2728960",
+    "reason": "Incomplete kana: ウヘッ"
+  },
+  {
+    "entSeq": "2729080",
+    "reason": "Incomplete kana: ペッペッ"
+  },
+  {
+    "entSeq": "2730550",
+    "reason": "Unsupported kana: あぼ〜ん"
+  },
+  {
+    "entSeq": "2731740",
+    "reason": "Incomplete kana: やりぃっ"
+  },
+  {
+    "entSeq": "2733320",
+    "reason": "Incomplete kana: ふにゃっ"
+  },
+  {
+    "entSeq": "2733720",
+    "reason": "Incomplete kana: きゃっ"
+  },
+  {
+    "entSeq": "2734690",
+    "reason": "Incomplete kana: にやっ"
+  },
+  {
+    "entSeq": "2738610",
+    "reason": "Incomplete kana: ペッ"
+  },
+  {
+    "entSeq": "2757120",
+    "reason": "Unsupported kana: とうはいちどのはじ、とわぬはまつだいのはじ"
+  },
+  {
+    "entSeq": "2763830",
+    "reason": "Incomplete kana: げほっげほっ"
+  },
+  {
+    "entSeq": "2770620",
+    "reason": "Incomplete kana: おっ"
+  },
+  {
+    "entSeq": "2770640",
+    "reason": "Incomplete kana: おっ"
+  },
+  {
+    "entSeq": "2777080",
+    "reason": "Incomplete kana: キャッキャッ"
+  },
+  {
+    "entSeq": "2777860",
+    "reason": "Incomplete kana: ごくっ"
+  },
+  {
+    "entSeq": "2809750",
+    "reason": "Incomplete kana: とっ"
+  },
+  {
+    "entSeq": "2812680",
+    "reason": "Incomplete kana: キンパッ"
+  },
+  {
+    "entSeq": "2817620",
+    "reason": "Incomplete kana: しっしっ"
+  },
+  {
+    "entSeq": "2826715",
+    "reason": "Incomplete kana: プーッ"
+  },
+  {
+    "entSeq": "2826923",
+    "reason": "Unsupported kana: ジャメヴュ"
+  },
+  {
+    "entSeq": "2827812",
+    "reason": "Unsupported kana: さくらきるばか、うめきらぬばか"
+  },
+  {
+    "entSeq": "2828231",
+    "reason": "Incomplete kana: ズブッズブッ"
+  },
+  {
+    "entSeq": "2828341",
+    "reason": "Unsupported kana: はなはさくらぎ、ひとはぶし"
+  },
+  {
+    "entSeq": "2828380",
+    "reason": "Incomplete kana: シュッシュッポッポッ"
+  },
+  {
+    "entSeq": "2829161",
+    "reason": "Incomplete kana: ビューンッ"
+  },
+  {
+    "entSeq": "2829769",
+    "reason": "Incomplete kana: シャーッ"
+  },
+  {
+    "entSeq": "2830583",
+    "reason": "Incomplete kana: キレッキレッ"
+  },
+  {
+    "entSeq": "2831102",
+    "reason": "Incomplete kana: きーっ"
+  },
+  {
+    "entSeq": "2832559",
+    "reason": "Unsupported kana: ゲヴュルツトラミネール"
+  },
+  {
+    "entSeq": "2832857",
+    "reason": "Incomplete kana: かっ"
+  },
+  {
+    "entSeq": "2833702",
+    "reason": "Unsupported kana: ゆびきりげんまん、うそついたらはりせんぼんのます"
+  },
+  {
+    "entSeq": "2833961",
+    "reason": "Unsupported kana: うめはくうともさねくうな、なかにてんじんねてござる"
+  },
+  {
+    "entSeq": "2834238",
+    "reason": "Incomplete kana: ジューッ"
+  },
+  {
+    "entSeq": "2834251",
+    "reason": "Unsupported kana: きた、みた、かった"
+  },
+  {
+    "entSeq": "2834318",
+    "reason": "Unsupported kana: ふたりははんりょ、さんにんはなかまわれ"
+  },
+  {
+    "entSeq": "2834319",
+    "reason": "Unsupported kana: はももいちご、えびもいちご"
+  },
+  {
+    "entSeq": "2834327",
+    "reason": "Incomplete kana: ムカッ"
+  },
+  {
+    "entSeq": "2834363",
+    "reason": "Unsupported kana: すみはがきにすらせ、ふではおににもたせよ"
+  },
+  {
+    "entSeq": "2834429",
+    "reason": "Incomplete kana: くそっ"
+  },
+  {
+    "entSeq": "2834436",
+    "reason": "Incomplete kana: オーマイガッ"
+  },
+  {
+    "entSeq": "2834438",
+    "reason": "Incomplete kana: イタッ"
+  },
+  {
+    "entSeq": "2834547",
+    "reason": "Unsupported kana: あしたにみちをきかば、ゆうべにしすともかなり"
+  },
+  {
+    "entSeq": "2834642",
+    "reason": "Unsupported kana: やなぎはみどり、はなはくれない"
+  },
+  {
+    "entSeq": "2835840",
+    "reason": "Incomplete kana: はっ"
+  },
+  {
+    "entSeq": "2835843",
+    "reason": "Incomplete kana: いよっ"
+  },
+  {
+    "entSeq": "2836571",
+    "reason": "Unsupported kana: きくはいっときのはじ、きかぬはいっしょうのはじ"
+  },
+  {
+    "entSeq": "2836754",
+    "reason": "Unsupported kana: ブルータスよ、おまえもか"
+  },
+  {
+    "entSeq": "2839151",
+    "reason": "Incomplete kana: パクッ"
+  },
+  {
+    "entSeq": "2839279",
+    "reason": "Incomplete kana: ちわっ"
+  },
+  {
+    "entSeq": "2839688",
+    "reason": "Incomplete kana: ハノッ"
+  },
+  {
+    "entSeq": "2840452",
+    "reason": "Unsupported kana: ちきゅうきぼでかんがえ、あしもとからこうどうせよ"
+  },
+  {
+    "entSeq": "2840542",
+    "reason": "Unsupported long vowel: んー"
+  },
+  {
+    "entSeq": "2840715",
+    "reason": "Incomplete kana: ええっ"
+  },
+  {
+    "entSeq": "2841724",
+    "reason": "Unsupported gemination: まっいいか"
+  },
+  {
+    "entSeq": "2842585",
+    "reason": "Unsupported kana: きくもなみだ、かたるもなみだ"
+  },
+  {
+    "entSeq": "2843561",
+    "reason": "Unsupported gemination: カッワーリー"
+  },
+  {
+    "entSeq": "2843963",
+    "reason": "Unsupported kana: せいあいちかし、ならいあいとおし"
+  },
+  {
+    "entSeq": "2844533",
+    "reason": "Unsupported kana: きょうのゆめ、おおさかのゆめ"
+  },
+  {
+    "entSeq": "2844633",
+    "reason": "Incomplete kana: ぽいっ"
+  },
+  {
+    "entSeq": "2844869",
+    "reason": "Unsupported kana: かりるときのじぞうがお、なすときのえんまがお"
+  },
+  {
+    "entSeq": "2845172",
+    "reason": "Incomplete kana: ちょっ"
+  },
+  {
+    "entSeq": "2845260",
+    "reason": "Unsupported kana: よそはよそ、うちはうち"
+  },
+  {
+    "entSeq": "2845806",
+    "reason": "Unsupported kana: あうもふしぎ、あわぬもふしぎ"
+  },
+  {
+    "entSeq": "2845915",
+    "reason": "Unsupported kana: たびはなさけ、ひとはこころ"
+  },
+  {
+    "entSeq": "2845916",
+    "reason": "Unsupported kana: ひとはひと、われはわれ"
+  },
+  {
+    "entSeq": "2847233",
+    "reason": "Unsupported kana: レヴュー"
+  },
+  {
+    "entSeq": "2847612",
+    "reason": "Incomplete kana: あれっ"
+  },
+  {
+    "entSeq": "2847755",
+    "reason": "Unsupported kana: アプフェルシュトュルーデル"
+  },
+  {
+    "entSeq": "2847876",
+    "reason": "Incomplete kana: シュンッ"
+  },
+  {
+    "entSeq": "2848816",
+    "reason": "Incomplete kana: きんもーっ"
+  },
+  {
+    "entSeq": "2849710",
+    "reason": "Incomplete kana: パキッ"
+  },
+  {
+    "entSeq": "2851035",
+    "reason": "Incomplete kana: プツッ"
+  },
+  {
+    "entSeq": "2851357",
+    "reason": "Unsupported kana: てんしる、ちしる、われしる、ししる"
+  },
+  {
+    "entSeq": "2851358",
+    "reason": "Unsupported kana: てんしる、ちしる、われしる、ひとしる"
+  },
+  {
+    "entSeq": "2851966",
+    "reason": "Unsupported kana: きょうのひとはり、あすのとはり"
+  },
+  {
+    "entSeq": "2852221",
+    "reason": "Unsupported kana: フォーティャオチァン"
+  },
+  {
+    "entSeq": "2854170",
+    "reason": "Incomplete kana: へぶしっ"
+  },
+  {
+    "entSeq": "2854982",
+    "reason": "Unsupported kana: おそうしもよど、はやうしもよど"
+  },
+  {
+    "entSeq": "2854983",
+    "reason": "Unsupported kana: はやうしもよど、おそうしもよど"
+  },
+  {
+    "entSeq": "2855172",
+    "reason": "Unsupported kana: やりらふぃ〜"
+  },
+  {
+    "entSeq": "2857109",
+    "reason": "Unsupported gemination: ぜっゆる"
+  },
+  {
+    "entSeq": "2857418",
+    "reason": "Incomplete kana: あいたっ"
+  },
+  {
+    "entSeq": "2857539",
+    "reason": "Unsupported kana: でゎでゎ"
+  },
+  {
+    "entSeq": "2859516",
+    "reason": "Incomplete kana: ぶわっ"
+  },
+  {
+    "entSeq": "2859770",
+    "reason": "Unsupported kana: 〜"
+  },
+  {
+    "entSeq": "2859784",
+    "reason": "Incomplete kana: ぐちゅぐちゅぺっ"
+  },
+  {
+    "entSeq": "2862669",
+    "reason": "Incomplete kana: ふっ"
+  },
+  {
+    "entSeq": "2863381",
+    "reason": "Incomplete kana: へくちっ"
+  },
+  {
+    "entSeq": "2863694",
+    "reason": "Unsupported kana: てゃ"
+  },
+  {
+    "entSeq": "2866675",
+    "reason": "Incomplete kana: パカラッパカラッ"
+  },
+  {
+    "entSeq": "2868867",
+    "reason": "Unsupported kana: かちにふしぎのかちあり、まけにふしぎのまけなし"
+  },
+  {
+    "entSeq": "2869341",
+    "reason": "Incomplete kana: ビクンッ"
+  },
+  {
+    "entSeq": "2869460",
+    "reason": "Incomplete kana: じーっ"
+  },
+  {
+    "entSeq": "2869466",
+    "reason": "Unsupported kana: あるような、ないような"
+  },
+  {
+    "entSeq": "2869497",
+    "reason": "Incomplete kana: ドピュッ"
+  },
+  {
+    "entSeq": "2869534",
+    "reason": "Incomplete kana: ガチャッ"
+  },
+  {
+    "entSeq": "2869537",
+    "reason": "Incomplete kana: ドタッ"
+  },
+  {
+    "entSeq": "2869599",
+    "reason": "Incomplete kana: けっ"
+  },
+  {
+    "entSeq": "2869695",
+    "reason": "Incomplete kana: ボコッ"
+  },
+  {
+    "entSeq": "2869708",
+    "reason": "Incomplete kana: ドクッ"
+  },
+  {
+    "entSeq": "2869724",
+    "reason": "Incomplete kana: くりっ"
+  },
+  {
+    "entSeq": "2869730",
+    "reason": "Incomplete kana: もちっ"
+  },
+  {
+    "entSeq": "2869731",
+    "reason": "Incomplete kana: びゅーっ"
+  },
+  {
+    "entSeq": "2869742",
+    "reason": "Incomplete kana: ニヘッ"
+  },
+  {
+    "entSeq": "2869746",
+    "reason": "Incomplete kana: くいっ"
+  },
+  {
+    "entSeq": "2869764",
+    "reason": "Incomplete kana: ジリッ"
+  },
+  {
+    "entSeq": "2869838",
+    "reason": "Incomplete kana: ざざっ"
+  },
+  {
+    "entSeq": "2869844",
+    "reason": "Incomplete kana: ピッ"
+  },
+  {
+    "entSeq": "2869845",
+    "reason": "Incomplete kana: ぴっ"
+  },
+  {
+    "entSeq": "2869847",
+    "reason": "Incomplete kana: ピチャッ"
+  },
+  {
+    "entSeq": "2869850",
+    "reason": "Incomplete kana: ピュッ"
+  },
+  {
+    "entSeq": "2869852",
+    "reason": "Incomplete kana: カチャッ"
+  },
+  {
+    "entSeq": "2869863",
+    "reason": "Incomplete kana: ムチっ"
+  },
+  {
+    "entSeq": "2869881",
+    "reason": "Incomplete kana: ジュワッ"
+  },
+  {
+    "entSeq": "2869915",
+    "reason": "Incomplete kana: ペシッ"
+  },
+  {
+    "entSeq": "2869916",
+    "reason": "Incomplete kana: パシッ"
+  },
+  {
+    "entSeq": "2870244",
+    "reason": "Incomplete kana: にちゃっ"
+  },
+  {
+    "entSeq": "2870321",
+    "reason": "Incomplete kana: くっ"
+  },
+  {
+    "entSeq": "2870322",
+    "reason": "Incomplete kana: んっ"
+  },
+  {
+    "entSeq": "2871070",
+    "reason": "Incomplete kana: オエッ"
+  },
+  {
+    "entSeq": "2871235",
+    "reason": "Incomplete kana: ちっちっ"
+  },
+  {
+    "entSeq": "2871596",
+    "reason": "Incomplete kana: えいっ"
+  },
+  {
+    "entSeq": "2871862",
+    "reason": "Incomplete kana: ダーッ"
+  },
+  {
+    "entSeq": "2872014",
+    "reason": "Incomplete kana: たたっ"
+  },
+  {
+    "entSeq": "2872456",
+    "reason": "Incomplete kana: くわっくわっ"
+  },
+  {
+    "entSeq": "2872579",
+    "reason": "Incomplete kana: はっはっ"
+  },
+  {
+    "entSeq": "5000899",
+    "reason": "Unsupported kana: いすゞ"
+  },
+  {
+    "entSeq": "5031031",
+    "reason": "Unsupported kana: オビ＝ワン・ケノービ"
+  },
+  {
+    "entSeq": "5741604",
+    "reason": "Unsupported kana: こゝろ"
+  },
+  {
+    "entSeq": "5741664",
+    "reason": "Unsupported kana: そのおとこ、きょうぼうにつき"
+  },
+  {
+    "entSeq": "5742005",
+    "reason": "Unsupported kana: わたし、ていじでかえります。"
+  }
+]

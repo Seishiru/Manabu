@@ -1,0 +1,30 @@
+[
+  {
+    "id": "jmdict",
+    "name": "JMdict (Japanese/English)",
+    "role": "Vocabulary, spellings, readings, English senses and parts of speech",
+    "version": "2026-10-03",
+    "url": "https://www.edrdg.org/pub/Nihongo/JMdict_e.gz",
+    "license": "CC-BY-SA-4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "permitted": true,
+    "redistribution": true,
+    "sha256": "76a91691b63094bf2aedca93cb889c7396945fe961e478f13081d839c9684e0c",
+    "retrievedAt": "2026-10-03",
+    "attribution": "This application uses JMdict (Japanese/English) dictionary data, property of the Electronic Dictionary Research and Development Group (EDRDG), used in conformance with its licence. Extracted, normalized and transliterated for Manabu; no endorsement implied."
+  },
+  {
+    "id": "kanjidic2",
+    "name": "KANJIDIC2",
+    "role": "Kanji meanings, readings, classical radical numbers, strokes, school grades and supplied frequency",
+    "version": "2026-276; file 4; 2026-10-03",
+    "url": "https://www.edrdg.org/kanjidic/kanjidic2.xml.gz",
+    "license": "CC-BY-SA-4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "permitted": true,
+    "redistribution": true,
+    "sha256": "d13ae54a6a0c63a09684f1ab7829c23a93f27214af802258cabf07f11b7a1b5d",
+    "retrievedAt": "2026-10-03",
+    "attribution": "This application uses KANJIDIC2 dictionary data, property of the Electronic Dictionary Research and Development Group (EDRDG), used in conformance with its licence. Extracted, normalized and transliterated for Manabu; no endorsement implied."
+  }
+]
