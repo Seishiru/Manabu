@@ -98,7 +98,8 @@ export default function Dictionary({
     (data.preferences.romaji !== "Show for difficult words" ||
       !learning[id]?.correct ||
       learning[id]?.needsReview)
-  const [query, setQuery] = useState("")
+  const [inputQuery, setInputQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   const [dictionaryMatches, setDictionaryMatches] = useState<Vocabulary[]>([])
   const [dictionaryLoading, setDictionaryLoading] = useState(false)
   const [dictionaryError, setDictionaryError] = useState("")
@@ -161,10 +162,10 @@ export default function Dictionary({
     else params.set("tab", next.toLowerCase())
     navigate({ pathname: "/dictionary", search: params.toString() })
   }
-  useEffect(() => setResultPage(1), [query, tab, filters, savedOnly])
+  useEffect(() => setResultPage(1), [searchQuery, tab, filters, savedOnly])
   useEffect(() => {
     let active = true
-    if (!query.trim() || savedOnly || tab === "Kanji") {
+    if (!searchQuery.trim() || savedOnly || tab === "Kanji") {
       setDictionaryMatches([])
       setDictionaryError("")
       setDictionaryLoading(false)
@@ -173,7 +174,7 @@ export default function Dictionary({
     setDictionaryMatches([])
     setDictionaryLoading(true)
     setDictionaryError("")
-    searchDictionary(query).then(matches => {
+    searchDictionary(searchQuery).then(matches => {
       if (active) setDictionaryMatches(matches.filter(match => !contentEntryById(match.id) && dictionaryEntryMatches(match)))
     }).catch(error => {
       if (active) setDictionaryError(error instanceof Error ? error.message : "Dictionary data unavailable")
@@ -181,7 +182,7 @@ export default function Dictionary({
       if (active) setDictionaryLoading(false)
     })
     return () => { active = false }
-  }, [query, savedOnly, tab])
+  }, [searchQuery, savedOnly, tab])
   const updateLearning = (id: string, change: { saved: boolean }) =>
     saveItem(id, change.saved)
   const speak = speakJapanese
@@ -198,8 +199,8 @@ export default function Dictionary({
         ? current.filter((item) => item !== filter)
         : [...current, filter],
     )
-  const normalized = query.trim().toLowerCase()
-  const searchIds = useMemo(() => new Set(searchContent(query)), [query])
+  const normalized = searchQuery.trim().toLowerCase()
+  const searchIds = useMemo(() => new Set(searchContent(searchQuery)), [searchQuery])
   const searchMatches = (id: string) => {
     const entry = contentEntryById(id)
     return !!entry && searchIds.has(entry.id)
@@ -246,7 +247,7 @@ export default function Dictionary({
     (word) =>
       wordMatches(word) &&
       searchMatches(word.id),
-  ), [query, tab, filters, learning, savedOnly])
+  ), [searchQuery, tab, filters, learning, savedOnly])
   const matchedKanji = useMemo(() => kanji.filter(
     (item) =>
       searchMatches(item.id) &&
@@ -254,7 +255,7 @@ export default function Dictionary({
       writingFilterMatches("kanji", filters) &&
       statusMatches(item.id) &&
       (!savedOnly || learning[item.id]?.saved),
-  ), [query, filters, learning, savedOnly])
+  ), [searchQuery, filters, learning, savedOnly])
   const statusFilters = ["Learned", "Not learned", "Incorrect"]
   const isFullBrowse = !normalized && tab === "All" && !savedOnly && !filters.some(filter => statusFilters.includes(filter))
   const isBrowsing = !normalized && (!filters.length || isFullBrowse) && !savedOnly
@@ -591,17 +592,27 @@ export default function Dictionary({
           </header>
           <div className="dict-layout">
             <div className="dict-content">
-              <div className="dict-search-box">
+              <form
+                className="dict-search-box"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  setSearchQuery(inputQuery)
+                }}
+              >
                 <Symbol name="search" />
                 <input
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  value={inputQuery}
+                  onChange={(event) => setInputQuery(event.target.value)}
                   placeholder="Search Japanese or English..."
                   aria-label="Search Japanese, romaji or English"
                 />
-                {query ? (
+                {inputQuery ? (
                   <button
-                    onClick={() => setQuery("")}
+                    type="button"
+                    onClick={() => {
+                      setInputQuery("")
+                      setSearchQuery("")
+                    }}
                     aria-label="Clear search"
                   >
                     ×
@@ -609,7 +620,7 @@ export default function Dictionary({
                 ) : (
                   <span>あ / A</span>
                 )}
-              </div>
+              </form>
               <div className="dict-toolbar">
                 <div
                   className="dict-tabs"
@@ -794,14 +805,15 @@ export default function Dictionary({
                     : results.length) && (
                   <div className="dict-empty">
                     <Symbol name="search" />
-                    <h3>{savedOnly && !query && !filters.length ? "You haven’t saved anything yet." : "No matching entries found."}</h3>
+                    <h3>{savedOnly && !searchQuery && !filters.length ? "You haven’t saved anything yet." : "No matching entries found."}</h3>
                     <p>
                       {savedOnly ? "Save an entry from its details to find it here, or show all entries." : "Try another spelling or remove a filter to broaden your search."}
                     </p>
                     <button
                       className="dict-text-button"
                       onClick={() => {
-                        setQuery("")
+                        setInputQuery("")
+                        setSearchQuery("")
                         setFilters([])
                         setSavedOnly(false)
                       }}
@@ -893,9 +905,9 @@ export default function Dictionary({
                 <span>ちょっとしたヒント</span>
                 <h4>A little tip</h4>
                 <p>
-                  Try <button onClick={() => setQuery("eat")}>eat</button>,{" "}
-                  <button onClick={() => setQuery("taberu")}>taberu</button>, or{" "}
-                  <button onClick={() => setQuery("食べる")}>食べる</button>.
+                  Try <button onClick={() => { setInputQuery("eat"); setSearchQuery("eat") }}>eat</button>,{" "}
+                  <button onClick={() => { setInputQuery("taberu"); setSearchQuery("taberu") }}>taberu</button>, or{" "}
+                  <button onClick={() => { setInputQuery("食べる"); setSearchQuery("食べる") }}>食べる</button>.
                   <br />
                   Different ways to the same word.
                 </p>
