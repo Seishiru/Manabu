@@ -11,6 +11,7 @@ import { kanaEntries } from "./content/catalog"
 import HomeWelcome from "./HomeWelcome"
 import SpotlightTour from "./SpotlightTour"
 import Shortcuts from "./Shortcuts"
+import Updates from "./Updates"
 import {
   createBrowserRouter,
   RouterProvider,
@@ -40,7 +41,7 @@ import {
   type Mode,
 } from "./learning"
 
-type IconName = "home" | "practice" | "book" | "kanji" | "keyboard" | "chart" | "settings" | "arrow" | "volume" | "flame" | "check"
+type IconName = "home" | "practice" | "book" | "kanji" | "keyboard" | "chart" | "settings" | "arrow" | "volume" | "flame" | "check" | "updates"
 
 const icons: Record<IconName, ReactNode> = {
   keyboard: <><rect x="2" y="5" width="20" height="14" rx="3" /><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10" /></>,
@@ -94,6 +95,7 @@ const icons: Record<IconName, ReactNode> = {
     <path d="M12 22c4 0 7-3 7-7 0-5-4-8-6-12 0 5-3 6-5 9-1-2-1-3-1-4-2 2-3 4-3 7 0 4 4 7 8 7Zm0-3c-2 0-3-1-3-3 0-1 1-2 2-3 0 2 2 2 2 4 1-1 1-2 1-2 1 2 0 4-2 4Z" />
   ),
   check: <path d="m5 12 4 4L19 6" />,
+  updates: <><path d="M4 5h16v14H4z" /><path d="M8 9h8M8 13h5" /><path d="m17 17 3 3" /></>,
 }
 
 function Icon({ name, size = 20 }: {
@@ -126,6 +128,7 @@ const nav = [
   { label: "Progress", icon: "chart" as IconName },
   { label: "Settings", icon: "settings" as IconName },
   { label: "Shortcuts", icon: "keyboard" as IconName },
+  { label: "Updates", icon: "updates" as IconName },
 ]
 
 function Logo() {
@@ -1099,6 +1102,8 @@ function ManabuShell() {
           <Settings />
         ) : active === "Shortcuts" ? (
           <Shortcuts />
+        ) : active === "Updates" ? (
+          <Updates />
         ) : (
           <Progress onPractice={practiceItem} onReview={review} />
         )}

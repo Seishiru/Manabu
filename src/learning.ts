@@ -442,6 +442,8 @@ export function eligibleItems(
         writingSystems(item.japanese).includes(writingSystemForWordContent(content)!)),
     )
     if (!matchesContent) return false
+    if (config.mode === "Flashcards" && config.answerType === "Drawing" &&
+      (item.kind !== "Hiragana" && item.kind !== "Katakana" || item.group === "Yoon")) return false
     if (!kanaOnly(item) && !config.levels.includes(item.level)) return false
     if (config.mode === "Sentence Formation" && !item.tokens) return false
     if (
@@ -515,10 +517,7 @@ export function configForItem(config: Config, item: Item, position = 0): Config 
   const seed = (cardSeed(item.id) + position + (config.randomSeed || 0)) >>> 0
   const directions = flashcardDirections
   const answerTypes: AnswerType[] = ["Multiple Choice", "Typing", "Self Check"]
-  if (
-    (item.kind === "Hiragana" || item.kind === "Katakana") &&
-    ["Basic", "Dakuon", "Handakuon"].includes(item.group || "")
-  )
+  if ((item.kind === "Hiragana" || item.kind === "Katakana") && item.group !== "Yoon")
     answerTypes.push("Drawing")
   const answerType = config.randomizeAnswerType
     ? answerTypes[seed % answerTypes.length]

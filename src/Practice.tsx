@@ -35,6 +35,7 @@ import HandwritingBoard from "./writing/HandwritingBoard"
 import type { InkStroke } from "./writing/model"
 import { romajiToKana, type Script } from "./keyboard"
 import { defaultWritingSettings } from "./writing/settings"
+import WritingResult from "./writing/WritingResult"
 
 const answerKeys = ["q", "w", "a", "s"]
 const selfRatings = understandingRatings.map(label => ({ label }))
@@ -198,6 +199,8 @@ export default function Practice({
   const [dictionaryLoading, setDictionaryLoading] = useState(false)
   const [dictionaryError, setDictionaryError] = useState<string | null>(null)
   const [drawingStrokes, setDrawingStrokes] = useState<InkStroke[]>([])
+  const [drawingRedo, setDrawingRedo] = useState<InkStroke[]>([])
+  const [drawingResultOpen, setDrawingResultOpen] = useState(false)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [typedCharacters, setTypedCharacters] = useState(0)
   const [sentenceScript, setSentenceScript] = useState<Script>("Hiragana")
@@ -215,6 +218,8 @@ export default function Practice({
     setHint(false)
     setPieces([])
     setDrawingStrokes([])
+    setDrawingRedo([])
+    setDrawingResultOpen(false)
     setElapsedSeconds(0)
     setTypedCharacters(0)
     setRetrying(false)
@@ -272,6 +277,11 @@ export default function Practice({
   }, [cardKey, cardConfig?.answerType, feedback])
   const finishDrawing = () => {
     if (!current || !active || !cardConfig || !drawingStrokes.length || feedback !== null) return
+    setDrawingResultOpen(true)
+  }
+  const completeDrawing = () => {
+    if (!current || !active || feedback !== null) return
+    setDrawingResultOpen(false)
     if (recordAnswer(current.id, true)) setFeedback(true)
   }
   const rateUnderstanding = (rating: Understanding) => {
@@ -597,14 +607,19 @@ export default function Practice({
                 <HandwritingBoard
                   character={current.japanese}
                   geometry={[]}
-                  settings={data.preferences.writing || defaultWritingSettings}
+                  settings={{ ...(data.preferences.writing || defaultWritingSettings), guided: false, grid: true, numbers: false }}
                   strokes={drawingStrokes}
                   completed={false}
-                  onStroke={stroke => setDrawingStrokes(strokes => [...strokes, stroke])}
+                  onStroke={stroke => { setDrawingStrokes(strokes => [...strokes, stroke]); setDrawingRedo([]) }}
                   onActive={() => undefined}
                   onDone={finishDrawing}
                 />
-                <button className="wide-primary" disabled={!drawingStrokes.length} onClick={finishDrawing}>Evaluate drawing</button>
+                <div className="writing-controls">
+                  <button className="secondary-button" disabled={!drawingStrokes.length} onClick={() => { setDrawingStrokes([]); setDrawingRedo([]) }}>Clear</button>
+                  <button className="secondary-button" disabled={!drawingStrokes.length} onClick={() => { const last = drawingStrokes[drawingStrokes.length - 1]; setDrawingStrokes(drawingStrokes.slice(0, -1)); if (last) setDrawingRedo([...drawingRedo, last]) }}>Undo</button>
+                  <button className="secondary-button" disabled={!drawingRedo.length} onClick={() => { const last = drawingRedo[drawingRedo.length - 1]; setDrawingRedo(drawingRedo.slice(0, -1)); if (last) setDrawingStrokes([...drawingStrokes, last]) }}>Redo</button>
+                  <button className="dict-primary" disabled={!drawingStrokes.length} onClick={finishDrawing}>Write · Self-check</button>
+                </div>
               </>
             ) : answerType === "Sentence typing" ? (
               <form onSubmit={event => { event.preventDefault(); if (answer.trim()) submit() }}>
@@ -756,6 +771,7 @@ export default function Practice({
         <p className="learn-local-note">
           Your progress is saved on this device.
         </p>
+        {drawingResultOpen && current && <WritingResult character={current.japanese} strokes={drawingStrokes} geometry={[]} onClose={() => setDrawingResultOpen(false)} onContinueWriting={() => setDrawingResultOpen(false)} onAgain={() => { setDrawingResultOpen(false); setDrawingStrokes([]); setDrawingRedo([]) }} onNext={completeDrawing} />}
       </main>
     )
   }
@@ -843,11 +859,11 @@ export default function Practice({
             </label>
             {config.answerType === "Sentence typing" && (
               <div className="learn-setup-options">
-                <label className="learn-field">Minimum words
-                  <input type="number" min="1" max="20" value={config.sentenceMinWords || 3} onChange={event => changeConfig({ sentenceMinWords: Math.max(1, Number(event.target.value)) })} />
+                <label className="learn-field">Minimum words <output>{config.sentenceMinWords || 3}</output>
+                  <input type="range" min="1" max="30" value={config.sentenceMinWords || 3} onChange={event => changeConfig({ sentenceMinWords: Math.min(Number(event.target.value), config.sentenceMaxWords || 8) })} />
                 </label>
-                <label className="learn-field">Maximum words
-                  <input type="number" min={config.sentenceMinWords || 3} max="30" value={config.sentenceMaxWords || 8} onChange={event => changeConfig({ sentenceMaxWords: Math.max(config.sentenceMinWords || 3, Number(event.target.value)) })} />
+                <label className="learn-field">Maximum words <output>{config.sentenceMaxWords || 8}</output>
+                  <input type="range" min="1" max="30" value={config.sentenceMaxWords || 8} onChange={event => changeConfig({ sentenceMaxWords: Math.max(config.sentenceMinWords || 3, Number(event.target.value)) })} />
                 </label>
               </div>
             )}

@@ -1,7 +1,7 @@
 {
   "name": "figma-make-app",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.0a",
   "type": "module",
   "scripts": {
     "writing:prepare": "node scripts/import-kana-strokes.mjs",

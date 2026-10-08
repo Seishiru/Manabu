@@ -13,6 +13,7 @@ const groups = [
     ["1 / 2 / 3", "Study / Write / switch Hiragana and Katakana"], ["A / D", "Previous / next character"],
     ["Space", "Study: play or pause · Write: toggle guides"], ["R", "Replay stroke animation in Study"],
     ["Z / X / C", "Clear / undo / redo in Write"],
+    ["Clear / Undo / Redo", "Drawing practice controls before self-check"],
     ["Left click", "Open a character’s writing page"],
     ["Right click / hold", "Hear a character’s pronunciation"],
     ["Shift + F10", "Open a focused character’s writing page"],

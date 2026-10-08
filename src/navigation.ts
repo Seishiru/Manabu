@@ -1,4 +1,4 @@
-export const pagePaths = ["/", "/home", "/practice", "/dictionary", "/japanese-keyboard", "/writing-system", "/progress", "/settings", "/shortcuts", "/kanji"]
+export const pagePaths = ["/", "/home", "/practice", "/dictionary", "/japanese-keyboard", "/writing-system", "/progress", "/settings", "/shortcuts", "/updates", "/kanji"]
 export function writingCharacterId(pathname: string): string | null {
   const match = pathname.replace(/\/$/, "").match(/^\/writing-system\/character\/([^/]+)$/)
   if (!match) return null

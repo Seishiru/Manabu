@@ -1,7 +1,7 @@
 export const sections = {
   "/": "Home", "/home": "Home", "/practice": "Practice", "/dictionary": "Dictionary",
   "/japanese-keyboard": "Japanese Keyboard", "/writing-system": "Writing System",
-  "/progress": "Progress", "/settings": "Settings", "/kanji": "Dictionary",
+  "/progress": "Progress", "/settings": "Settings", "/shortcuts": "Shortcuts", "/updates": "Updates", "/kanji": "Dictionary",
 } as const
 export function sectionForPath(path: string): string | null {
   const normalized = path.replace(/\/+$/, "") || "/"
