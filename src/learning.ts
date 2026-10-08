@@ -10,7 +10,7 @@ import { writingSystems } from "./content/writingType"
 export type Content = ContentKind
 export type Mode = "Flashcards" | "Identification" | "Romaji Input" | "Sentence Formation"
 export type Direction = "Japanese → English" | "Japanese → Romaji" | "Romaji → Japanese" | "English → Japanese" | "English → Romaji" | "Romaji → English" | "Kana → Romaji" | "Romaji → Kana" | "Randomize"
-export type AnswerType = "Typing" | "Multiple Choice" | "Self Check" | "Randomize"
+export type AnswerType = "Typing" | "Multiple Choice" | "Self Check" | "Sentence typing" | "Drawing" | "Randomize"
 export const understandingRatings = ["Forgotten", "Hesitated", "Aware", "Obvious"] as const
 export type Understanding = typeof understandingRatings[number]
 const isUnderstanding = (value: unknown): value is Understanding => understandingRatings.includes(value as Understanding)
@@ -27,6 +27,9 @@ export type Config = {
   limit: number
   reviewOnly: boolean
   learnedOnly: boolean
+  sentenceMinWords?: number
+  sentenceMaxWords?: number
+  randomizeAnswerType?: boolean
 }
 export type Profile = {
   name: string
@@ -99,11 +102,13 @@ export const defaultConfig: Config = {
   content: ["Kanji"],
   levels: ["N5", "N4", "N3", "N2", "N1", "Unclassified"],
   writing: ["Hiragana", "Katakana", "Kanji"],
-  direction: "English → Japanese",
+  direction: "Japanese → Romaji",
   answerType: "Typing",
   limit: 10,
   reviewOnly: false,
   learnedOnly: false,
+  sentenceMinWords: 3,
+  sentenceMaxWords: 8,
 }
 const defaults: LearningState = {
   version: 1,
@@ -137,7 +142,7 @@ const finiteCount = (value: unknown) =>
 const levels = ["Beginner", "N5", "N4", "N3", "N2", "N1"]
 const modes = ["Flashcards", "Identification", "Romaji Input", "Sentence Formation"]
 const writingWordContent = ["Hiragana word", "Katakana word", "Kanji word"] as const
-const supportedContent = ["All", "Randomize", "Hiragana", "Katakana", "Kanji", ...writingWordContent, "Words", "Sentences"]
+const supportedContent = ["All", "Randomize", "Hiragana", "Katakana", "Kanji", ...writingWordContent, "Words", "Sentences", "Basics", "Dakuon", "Handakuon", "Yoon"]
 const writingSystemForWordContent = (content: Content) =>
   content === "Hiragana word" ? "Hiragana" :
     content === "Katakana word" ? "Katakana" :
@@ -150,7 +155,7 @@ export function validPracticeConfig(value: unknown): value is Config {
     stringArray(value.levels) && value.levels.every(level => [...levels.slice(1), "Unclassified"].includes(level)) &&
     stringArray(value.writing) && value.writing.every(system => ["Hiragana", "Katakana", "Kanji"].includes(system)) &&
     ["Japanese → English", "Japanese → Romaji", "Romaji → Japanese", "English → Japanese", "English → Romaji", "Romaji → English", "Kana → Romaji", "Romaji → Kana", "Randomize"].includes(String(value.direction)) &&
-    ["Typing", "Multiple Choice", "Self Check", "Randomize"].includes(String(value.answerType)) &&
+    ["Typing", "Multiple Choice", "Self Check", "Sentence typing", "Drawing", "Randomize"].includes(String(value.answerType)) &&
     typeof value.limit === "number" && Number.isInteger(value.limit) && value.limit >= 1 && value.limit <= 50 &&
     typeof value.reviewOnly === "boolean" && typeof value.learnedOnly === "boolean"
 }
@@ -160,7 +165,8 @@ export function validActiveSession(value: unknown): value is ActiveSession {
     !Number.isInteger(value.index) || Number(value.index) < 0 || Number(value.index) >= value.ids.length || !object(value.answers) || !stringArray(value.newItems) || !stringArray(value.retried)) return false
   const ids = value.ids, answers = value.answers
   const selfCheck = value.config.answerType === "Self Check" && value.config.mode !== "Sentence Formation"
-  return Object.entries(answers).every(([id, answer]) => ids.includes(id) && (selfCheck ? isUnderstanding(answer) : typeof answer === "boolean")) &&
+  const randomized = value.config.answerType === "Randomize"
+  return Object.entries(answers).every(([id, answer]) => ids.includes(id) && (randomized ? (typeof answer === "boolean" || isUnderstanding(answer)) : selfCheck ? isUnderstanding(answer) : typeof answer === "boolean")) &&
     value.newItems.every(id => ids.includes(id)) && value.retried.every(id => ids.includes(id) && answers[id] === false) &&
     ids.slice(0, Number(value.index)).every(id => Object.prototype.hasOwnProperty.call(answers, id))
 }
@@ -400,10 +406,8 @@ export const shuffle = <Value>(values: Value[]): Value[] => {
 }
 const kanaOnly = (item: Item) =>
   item.kind === "Hiragana" || item.kind === "Katakana"
-export const availableDirections = (content: Content[]): Direction[] =>
-  content.every((kind) => ["Hiragana", "Katakana"].includes(kind))
-    ? ["Kana → Romaji", "Romaji → Kana"]
-      : [
+export const availableDirections = (_content: Content[]): Direction[] =>
+  [
           "Japanese → Romaji",
           "Romaji → Japanese",
           "Japanese → English",
@@ -412,6 +416,10 @@ export const availableDirections = (content: Content[]): Direction[] =>
           "Romaji → English",
           "Randomize",
         ]
+export const flashcardDirections: Direction[] = [
+  "Japanese → Romaji",
+  "Romaji → Japanese",
+]
 export function eligibleItems(
   config: Config,
   progress = state.progress,
@@ -420,6 +428,9 @@ export function eligibleItems(
     const matchesContent = config.content.some(content =>
       content === "All" ||
       content === item.kind ||
+      (["Basics", "Dakuon", "Handakuon", "Yoon"] as string[]).includes(content) &&
+        (item.kind === "Hiragana" || item.kind === "Katakana") &&
+        item.group === ({ Basics: "Basic", Dakuon: "Dakuon", Handakuon: "Handakuon", Yoon: "Yoon" } as Record<string, string>)[content] ||
       (isWritingWordContent(content) &&
         item.kind === "Words" &&
         writingSystems(item.japanese).includes(writingSystemForWordContent(content)!)),
@@ -429,14 +440,8 @@ export function eligibleItems(
     if (config.mode === "Sentence Formation" && !item.tokens) return false
     if (
       config.mode !== "Sentence Formation" &&
-      kanaOnly(item) &&
-      ["Japanese → English", "English → Japanese"].includes(config.direction)
-    )
-      return false
-    if (
-      config.mode !== "Romaji Input" &&
-      item.kind === "Kanji" &&
-      ["Kana → Romaji", "Romaji → Kana"].includes(config.direction)
+      ["Japanese → English", "English → Japanese"].includes(config.direction) &&
+      kanaOnly(item)
     )
       return false
     if (config.reviewOnly && !progress[item.id]?.needsReview) return false
@@ -450,9 +455,6 @@ export function eligibleItems(
 export function beginSession(config: Config, ids?: string[]) {
   if (!validPracticeConfig(config)) return false
   const sessionConfig = resolvePracticeConfig(config)
-  const directions = availableDirections(sessionConfig.content).filter(direction => direction !== "Randomize")
-  if (sessionConfig.direction === "Randomize")
-    sessionConfig.direction = directions[Math.floor(Math.random() * directions.length)] || "Japanese → English"
   const deck = ids
     ? [...new Set(ids.map(id => itemById(id)).filter((item): item is Item => !!item && (sessionConfig.mode !== "Sentence Formation" || !!item.tokens?.length)).map(item => item.id))]
     : shuffle(eligibleItems(sessionConfig).map((item) => item.id)).slice(
@@ -477,25 +479,41 @@ export function beginSession(config: Config, ids?: string[]) {
 }
 export function resolvePracticeConfig(config: Config): Config {
   const contentChoices = config.content.filter(content => content !== "Randomize")
-  const sessionContent = config.content.includes("Randomize")
-    ? [contentChoices[Math.floor(Math.random() * contentChoices.length)] || "All"]
+  // Randomize mixes the selected content kinds throughout the deck. It must
+  // not collapse to one kind when the session starts.
+  const sessionContent: Content[] = config.content.includes("Randomize")
+    ? (contentChoices.length ? contentChoices : ["All"])
     : contentChoices
-  const answerTypes: AnswerType[] = ["Typing", "Multiple Choice", "Self Check"]
   const sessionConfig = {
     ...config,
     content: sessionContent,
     answerType: config.answerType === "Randomize"
-      ? answerTypes[Math.floor(Math.random() * answerTypes.length)] || "Typing"
+      ? (["Typing", "Multiple Choice", "Self Check"] as AnswerType[])[Math.floor(Math.random() * 3)]
       : config.answerType,
+    randomizeAnswerType: config.answerType === "Randomize",
   }
   return sessionConfig
+}
+const cardSeed = (id: string) => [...id].reduce((sum, character) => (sum * 31 + character.charCodeAt(0)) >>> 0, 7)
+export function configForItem(config: Config, item: Item, position = 0): Config {
+  const seed = cardSeed(item.id) + position
+  const directions = flashcardDirections
+  const answerTypes: AnswerType[] = ["Typing", "Multiple Choice", "Self Check", "Sentence typing"]
+  if (item.kind === "Hiragana" || item.kind === "Katakana") answerTypes.push("Drawing")
+  return {
+    ...config,
+    direction: config.direction === "Randomize" ? directions[seed % directions.length] : config.direction,
+    answerType: config.randomizeAnswerType ? answerTypes[seed % answerTypes.length] : config.answerType,
+  }
 }
 export function registerDictionaryItems(entries: Item[]) {
   registerDictionaryPracticeItems(entries)
 }
 export function recordAnswer(id: string, correct: boolean, retry = false) {
   const session = state.activeSession
-  if (!session || session.config.answerType === "Self Check" || session.ids[session.index] !== id) return false
+  const current = session && itemById(session.ids[session.index])
+  const cardConfig = current ? configForItem(session.config, current, session.index) : null
+  if (!session || cardConfig?.answerType === "Self Check" || session.ids[session.index] !== id) return false
   const progress = state.progress[id] || {
     saved: false,
     correct: 0,
@@ -530,7 +548,9 @@ export function recordAnswer(id: string, correct: boolean, retry = false) {
 }
 export function recordUnderstanding(id: string, rating: Understanding) {
   const session = state.activeSession
-  if (!session || session.config.mode === "Sentence Formation" || session.config.answerType !== "Self Check" || session.ids[session.index] !== id || id in session.answers || !isUnderstanding(rating)) return false
+  const current = session && itemById(session.ids[session.index])
+  const cardConfig = current ? configForItem(session.config, current, session.index) : null
+  if (!session || session.config.mode === "Sentence Formation" || cardConfig?.answerType !== "Self Check" || session.ids[session.index] !== id || id in session.answers || !isUnderstanding(rating)) return false
   const progress = state.progress[id] || { saved: false, correct: 0, incorrect: 0, needsReview: false }
   updateState({
     progress: { ...state.progress, [id]: { ...progress, understanding: rating, selfChecks: (progress.selfChecks || 0) + 1, lastPracticed: new Date().toISOString() } },
@@ -613,6 +633,13 @@ const romajiAnswers = (item: Item) =>
     ]),
   ]
 export function question(item: Item, config: Config) {
+  if (config.answerType === "Sentence typing")
+    return {
+      prompt: item.meanings[0],
+      accepted: [item.sentence || item.japanese],
+      expected: item.sentence || item.japanese,
+      hint: item.reading,
+    }
   if (config.mode === "Sentence Formation")
     return {
       prompt: item.meanings[0],

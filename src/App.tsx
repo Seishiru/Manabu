@@ -447,6 +447,35 @@ const languages = [
   { name: "Français", flag: "french" },
   { name: "Deutsch", flag: "german" },
 ]
+const onboardingText = (language: string) => language === "日本語"
+  ? {
+      choose: "言語を選択",
+      select: "アプリで使用する言語を選択してください。",
+      next: "次へ",
+      tip: "ヒント",
+      welcome: "Manabuへようこそ",
+      learn: "あなたの方法で日本語を学ぼう。",
+      intro: "練習する内容を選び、自分のペースで学びましょう。",
+      started: "始める",
+      privacyTitle: "学習データはあなたのものです。",
+      privacy: "進捗はこの端末に保存されます。オンラインアカウントは必要ありません。",
+      guest: "ゲストとして続ける",
+      restore: "以前に書き出したManabuのバックアップを復元します。",
+    }
+  : {
+      choose: "Choose your language",
+      select: "Select the language you want to use the app in.",
+      next: "Next",
+      tip: "Tip",
+      welcome: "WELCOME TO MANABU",
+      learn: "Learn Japanese your way.",
+      intro: "Choose what to practice. Learn at your own pace.",
+      started: "Get Started",
+      privacyTitle: "Your learning data stays with you.",
+      privacy: "Your progress is saved on this device. No online account required.",
+      guest: "Continue as Guest",
+      restore: "Restore a previously exported Manabu backup.",
+    }
 
 function Globe() {
   return (
@@ -479,44 +508,20 @@ function Globe() {
 }
 
 function LanguageSelection({ onNext }: { onNext: (language: string) => void }) {
-  const language = useLearning().language
-  const [selected, setSelected] = useState(language)
+  const copy = onboardingText("English")
   return (
     <main className="onboarding language-screen">
       <div className="onboarding-inner">
         <div className="globe">
           <Globe />
         </div>
-        <h1>Choose your language</h1>
+        <h1>{copy.choose}</h1>
         <p className="onboarding-subtitle">
-          Select the language you want
-          <br />
-          to use the app in.
+          {copy.select}
         </p>
-        <div className="language-list">
-          {languages.map((language) => (
-            <button
-              className={
-                selected === language.name
-                  ? "language-option selected"
-                  : "language-option"
-              }
-              key={language.name}
-              aria-pressed={selected === language.name}
-              onClick={() => setSelected(language.name)}
-            >
-              <span className={`flag ${language.flag}`} />
-              <span>{language.name}</span>
-              {selected === language.name && (
-                <span className="language-check">
-                  <Icon name="check" size={19} />
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-        <button className="onboarding-button" onClick={() => onNext(selected)}>
-          Next <Icon name="arrow" size={17} />
+        <p className="onboarding-subtitle">English is currently the supported app language.</p>
+        <button className="onboarding-button" onClick={() => onNext("English")}>
+          {copy.next} <Icon name="arrow" size={17} />
         </button>
       </div>
     </main>
@@ -545,6 +550,8 @@ function MountainMark() {
 }
 
 function LoadingScreen({ onDone }: { onDone: () => void }) {
+  const language = useLearning().language
+  const copy = onboardingText(language)
   const tips = [
     "Japanese sentences usually place the verb at the end.",
     "ありがとう means arigatou — thank you.",
@@ -573,7 +580,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
         <div className="tip" aria-live="polite">
           <span className="bulb">i</span>
           <p>
-            <strong>Tip:</strong>
+            <strong>{copy.tip}:</strong>
             <br />
             {tips[tipIndex]}
           </p>
@@ -605,17 +612,16 @@ const introFeatures = [
 ]
 
 function Introduction({ onStart }: { onStart: () => void }) {
+  const copy = onboardingText(useLearning().language)
   return (
     <main className="onboarding intro-screen">
       <div className="intro-inner">
-        <p className="eyebrow">WELCOME TO MANABU</p>
+        <p className="eyebrow">{copy.welcome}</p>
         <h1>
-          Learn Japanese
-          <br />
-          your way.
+          {copy.learn}
         </h1>
         <p className="intro-subtitle">
-          Choose what to practice. Learn at your own pace.
+          {copy.intro}
         </p>
         <div className="intro-features">
           {introFeatures.map((feature) => (
@@ -631,7 +637,7 @@ function Introduction({ onStart }: { onStart: () => void }) {
           ))}
         </div>
         <button className="onboarding-button" onClick={onStart}>
-          Get Started <Icon name="arrow" size={17} />
+          {copy.started} <Icon name="arrow" size={17} />
         </button>
       </div>
       <div className="intro-landscape" aria-hidden="true">
@@ -651,6 +657,7 @@ function PrivacyScreen({
   onContinue: () => void
   onRestored: () => void
 }) {
+  const copy = onboardingText(useLearning().language)
   return (
     <main className="onboarding privacy-screen">
       <div className="privacy-inner">
@@ -661,18 +668,16 @@ function PrivacyScreen({
             <Icon name="settings" size={38} />
           </div>
         </div>
-        <h1>Your learning data stays with you.</h1>
+        <h1>{copy.privacyTitle}</h1>
         <p className="onboarding-subtitle">
-          Your progress is saved on this device.
-          <br />
-          No online account required.
+          {copy.privacy}
         </p>
         <button className="onboarding-button" onClick={onContinue}>
-          Continue as Guest
+          {copy.guest}
         </button>
         <RestoreControl onRestored={onRestored} />
         <small className="privacy-help">
-          Restore a previously exported Manabu backup.
+          {copy.restore}
         </small>
       </div>
     </main>
@@ -758,6 +763,8 @@ function KanaButton({ id, kana, romaji }: Kana) {
   const tooltipId = useId()
   const [showPreview, setShowPreview] = useState(false)
   const previewTimer = useRef<number | null>(null)
+  const holdTimer = useRef<number | null>(null)
+  const held = useRef(false)
 
   const openPreview = () => {
     if (previewTimer.current) window.clearTimeout(previewTimer.current)
@@ -770,19 +777,43 @@ function KanaButton({ id, kana, romaji }: Kana) {
     setShowPreview(false)
   }
 
-  useEffect(() => closePreview, [])
+  useEffect(() => () => {
+    closePreview()
+    if (holdTimer.current) window.clearTimeout(holdTimer.current)
+  }, [])
 
   const pronounce = () => {
     speakJapanese(kana)
+  }
+  const startHold = () => {
+    if (holdTimer.current) window.clearTimeout(holdTimer.current)
+    holdTimer.current = window.setTimeout(() => {
+      holdTimer.current = null
+      held.current = true
+      pronounce()
+    }, 500)
+  }
+  const cancelHold = () => {
+    if (holdTimer.current) window.clearTimeout(holdTimer.current)
+    holdTimer.current = null
   }
 
   return (
     <button
       className="kana-button"
-      aria-label={`${kana}, ${romaji}. Click to hear pronunciation. Right-click or Shift F10 to open writing practice.`}
+      aria-label={`${kana}, ${romaji}. Click to open writing practice. Right-click or hold to hear pronunciation.`}
       aria-describedby={showPreview ? tooltipId : undefined}
-      onClick={pronounce}
-      onContextMenu={event => { event.preventDefault(); openCharacter() }}
+      onClick={() => {
+        if (held.current) {
+          held.current = false
+          return
+        }
+        openCharacter()
+      }}
+      onContextMenu={event => { event.preventDefault(); cancelHold(); pronounce() }}
+      onPointerDown={event => { if (event.pointerType === "touch") startHold() }}
+      onPointerUp={event => { if (event.pointerType === "touch") cancelHold() }}
+      onPointerCancel={cancelHold}
       onMouseEnter={openPreview}
       onMouseLeave={closePreview}
       onFocus={openPreview}
@@ -798,7 +829,7 @@ function KanaButton({ id, kana, romaji }: Kana) {
         <span className="stroke-tooltip" role="tooltip" id={tooltipId}>
           <span className="tooltip-label">Sound & reading</span>
           <span className="kana-preview-character">{kana}</span>
-          <small>{romaji} · Click to listen</small>
+          <small>{romaji} · Right-click or hold to listen</small>
         </span>
       )}
     </button>
@@ -820,7 +851,7 @@ function CharacterTable({
     <main className="workspace-page">
       <PageHeading
         title={`${script} Table`}
-        subtitle="Click to listen. Right-click a character to explore its strokes and write."
+        subtitle="Click a character to explore its strokes and write. Right-click or hold it to hear the pronunciation."
       />
       <label className="writing-character-picker">Open writing practice<select aria-label="Choose a character for writing practice" value="" onChange={event => { if (event.target.value) navigate(`/writing-system/character/${event.target.value}`) }}><option value="">Choose a character…</option>{kanaSectionLabels.map(group => <optgroup key={group.title} label={group.title}>{kanaEntries.filter(entry => entry.kind === script && entry.group === group.title).map(entry => <option key={entry.id} value={entry.id}>{entry.japanese} · {entry.romaji}</option>)}</optgroup>)}</select></label>
       <div className="script-toggle" role="tablist" aria-label="Writing system" onKeyDown={navigateTabs}>

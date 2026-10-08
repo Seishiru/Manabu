@@ -10,11 +10,11 @@ const groups = [
     ["T", "Review mistakes on the results page"],
   ] },
   { title: "Writing System", rows: [
-    ["1 / 2", "Study / Write"], ["A / D", "Previous / next character"],
+    ["1 / 2 / 3", "Study / Write / switch Hiragana and Katakana"], ["A / D", "Previous / next character"],
     ["Space", "Study: play or pause · Write: toggle guides"], ["R", "Replay stroke animation in Study"],
     ["Z / X / C", "Clear / undo / redo in Write"],
-    ["Right click", "Character: open writing page · writing grid: Done Self-check"],
-    ["Left click", "Hear a character’s pronunciation"],
+    ["Left click", "Open a character’s writing page"],
+    ["Right click / hold", "Hear a character’s pronunciation"],
     ["Shift + F10", "Open a focused character’s writing page"],
   ] },
   { title: "Dialogs & tutorial", rows: [

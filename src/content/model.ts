@@ -7,6 +7,10 @@ export type ContentKind =
   | "Hiragana word"
   | "Katakana word"
   | "Kanji word"
+  | "Basics"
+  | "Dakuon"
+  | "Handakuon"
+  | "Yoon"
   | "All"
   | "Randomize"
 export type JLPTLevel = "N5" | "N4" | "N3" | "N2" | "N1" | "Unclassified"
@@ -21,6 +25,8 @@ export type PracticeItem = {
   level: string
   readings?: string[]
   tokens?: string[]
+  group?: "Basic" | "Dakuon" | "Handakuon" | "Yoon"
+  sentence?: string
 }
 export type Source = {
   role?: string

@@ -4,6 +4,7 @@ import { speakJapanese, updateState, useLearning } from "../learning"
 import type { KanaEntry } from "../content/model"
 import { writingCharacterId } from "../navigation"
 import { characterSequence, drawingReducer, emptyDrawing, kanaCharacter, strokeGeometry, strokeSource } from "./model"
+import { kanaEntries } from "../content/catalog"
 import { defaultWritingSettings, type WritingSettings } from "./settings"
 import StrokeDiagram from "./StrokeDiagram"
 import HandwritingBoard from "./HandwritingBoard"
@@ -29,6 +30,10 @@ export function CharacterPractice({ entry }: { entry: KanaEntry }) {
   const settings = data.preferences.writing || defaultWritingSettings
   const geometry = useMemo(() => strokeGeometry(entry), [entry])
   const sequence = useMemo(() => characterSequence(entry), [entry])
+  const alternate = useMemo(
+    () => kanaEntries.find(candidate => candidate.kind !== entry.kind && candidate.japanese === entry.japanese),
+    [entry],
+  )
   const index = sequence.findIndex(character => character.id === entry.id)
   const tablePath = `/writing-system?script=${entry.kind.toLowerCase()}`
   const mode = data.preferences.writingMode || "Study"
@@ -90,6 +95,7 @@ export function CharacterPractice({ entry }: { entry: KanaEntry }) {
       if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]')) return
       const key = event.key.toLowerCase()
       const actions: Record<string, () => void> = { "1": () => setMode("Study"), "2": () => setMode("Write") }
+      if (alternate) actions["3"] = () => navigate(`/writing-system/character/${alternate.id}`)
       if (index > 0) actions.a = () => navigate(`/writing-system/character/${sequence[index - 1].id}`)
       if (index < sequence.length - 1) actions.d = () => navigate(`/writing-system/character/${sequence[index + 1].id}`)
       if (mode === "Study" && geometry.length) { actions[" "] = () => playing ? setPlaying(false) : play(); actions.r = () => play(true) }
@@ -109,7 +115,7 @@ export function CharacterPractice({ entry }: { entry: KanaEntry }) {
     <header className="writing-page-heading"><button className="dict-back" onClick={() => navigate(tablePath)}>← Back to Writing System</button><span className="writing-context">{entry.kind} · {entry.group}</span></header>
     <div className="writing-layout">
       <section className="learn-panel writing-workspace" aria-label={mode === "Write" ? "Handwriting practice" : "Stroke-order study"}>
-        <div className="writing-workspace-top"><div><p className="eyebrow">{mode === "Write" ? "MAKE IT YOURS" : "WATCH THE MOVEMENT"}</p><h2>{mode === "Write" ? "Your turn to write" : "Stroke order"}</h2></div><div className="script-toggle writing-mode-switch" role="group" aria-label="Writing mode"><button className={mode === "Study" ? "active" : ""} aria-label="Study" aria-keyshortcuts="1" aria-pressed={mode === "Study"} onClick={() => setMode("Study")}>Study <kbd>1</kbd></button><button className={mode === "Write" ? "active" : ""} aria-label="Write" aria-keyshortcuts="2" aria-pressed={mode === "Write"} onClick={() => setMode("Write")}>Write <kbd>2</kbd></button></div></div>
+        <div className="writing-workspace-top"><div><p className="eyebrow">{mode === "Write" ? "MAKE IT YOURS" : "WATCH THE MOVEMENT"}</p><h2>{mode === "Write" ? "Your turn to write" : "Stroke order"}</h2></div><div className="script-toggle writing-mode-switch" role="group" aria-label="Writing mode"><button className={mode === "Study" ? "active" : ""} aria-label="Study" aria-keyshortcuts="1" aria-pressed={mode === "Study"} onClick={() => setMode("Study")}>Study <kbd>1</kbd></button><button className={mode === "Write" ? "active" : ""} aria-label="Write" aria-keyshortcuts="2" aria-pressed={mode === "Write"} onClick={() => setMode("Write")}>Write <kbd>2</kbd></button>{alternate && <button aria-label={`Switch to ${alternate.kind}`} aria-keyshortcuts="3" onClick={() => navigate(`/writing-system/character/${alternate.id}`)}>{alternate.kind} <kbd>3</kbd></button>}</div></div>
         <p className="writing-workspace-romaji" aria-label={`Romaji: ${entry.romaji}`}>{entry.romaji}</p>
         {mode === "Study" ? <>
           <div className="writing-board-caption"><span>{geometry.length ? `${geometry.length} strokes` : "Reference only"}</span><span className="writing-playback-state" role="status">{geometry.length ? animationState : "No stroke data"}</span></div>

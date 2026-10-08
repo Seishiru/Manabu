@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import ConfirmationDialog from "./ConfirmationDialog"
 import {
-  availableDirections,
+  flashcardDirections,
   beginSession,
   completeSession,
   quitSession,
@@ -22,6 +22,7 @@ import {
   useLearning,
   registerDictionaryItems,
   resolvePracticeConfig,
+  configForItem,
   type AnswerType,
   type Config,
   type Content,
@@ -30,6 +31,9 @@ import {
   type Understanding,
 } from "./learning"
 import { dictionaryManifest, randomDictionaryPracticeItems } from "./content/dictionarySearch"
+import HandwritingBoard from "./writing/HandwritingBoard"
+import type { InkStroke } from "./writing/model"
+import { defaultWritingSettings } from "./writing/settings"
 
 const answerKeys = ["q", "w", "a", "s"]
 const selfRatings = understandingRatings.map(label => ({ label }))
@@ -73,22 +77,17 @@ function HiddenAnswer({ visible, onHold, children, alwaysVisible = false }: {
     </div>
   )
 }
-
 export function configForMode(mode: Mode, previous = defaultConfig): Config {
   const content = mode === "Flashcards"
     ? previous.content.filter(kind =>
-      ["Hiragana", "Katakana", "Kanji", "Hiragana word", "Katakana word", "Kanji word"].includes(kind))
+      ["Hiragana", "Katakana", "Kanji", "Basics", "Dakuon", "Handakuon", "Yoon", "Hiragana word", "Katakana word", "Kanji word"].includes(kind))
     : previous.content
   if (mode === "Identification")
     return {
       ...previous,
       content,
       mode,
-      direction: previous.content.every((kind) =>
-        ["Hiragana", "Katakana"].includes(kind),
-      )
-        ? "Kana → Romaji"
-        : "Japanese → English",
+      direction: "Japanese → Romaji",
       answerType: "Multiple Choice",
     }
   if (mode === "Romaji Input")
@@ -107,7 +106,14 @@ export function configForMode(mode: Mode, previous = defaultConfig): Config {
       direction: "English → Japanese",
       answerType: "Typing",
     }
-  return { ...previous, content: content.length ? content : ["Kanji"], mode }
+  return {
+    ...previous,
+    content: content.length ? content : ["Kanji"],
+    mode,
+    direction: mode === "Flashcards" && !flashcardDirections.includes(previous.direction)
+      ? flashcardDirections[0]
+      : previous.direction,
+  }
 }
 
 function Toggles({
@@ -160,7 +166,7 @@ export default function Practice({
   const [config, setConfig] = useState<Config>(() =>
     initialMode
       ? configForMode(initialMode, { ...data.practiceConfig, levels: allPracticeLevels })
-      : { ...data.practiceConfig, levels: allPracticeLevels },
+      : configForMode("Flashcards", { ...data.practiceConfig, levels: allPracticeLevels }),
   )
   const [answer, setAnswer] = useState("")
   const [feedback, setFeedback] = useState<boolean | Understanding | null>(null)
@@ -175,18 +181,23 @@ export default function Practice({
   const [dictionaryCount, setDictionaryCount] = useState<number | null>(null)
   const [dictionaryLoading, setDictionaryLoading] = useState(false)
   const [dictionaryError, setDictionaryError] = useState<string | null>(null)
+  const [drawingStrokes, setDrawingStrokes] = useState<InkStroke[]>([])
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [completedPractice, setCompletedPractice] = useState<{
     config: Config
     ids: string[]
   } | null>(null)
   const active = data.activeSession
   const current = active && itemById(active.ids[active.index])
-  const prompt = current && active ? question(current, active.config) : null
+  const cardConfig = current && active ? configForItem(active.config, current, active.index) : null
+  const prompt = current && cardConfig ? question(current, cardConfig) : null
   const cardKey = `${active?.id || ""}:${active?.index || 0}`
   useEffect(() => {
     setAnswer("")
     setHint(false)
     setPieces([])
+    setDrawingStrokes([])
+    setElapsedSeconds(0)
     setRetrying(false)
     setKeyPeeking(false)
     setPointerPeeking(false)
@@ -204,9 +215,9 @@ export default function Practice({
           .filter(
             (item) => item.kind === current.kind && item.id !== current.id,
           )
-          .map((item) => question(item, active.config).expected),
+          .map((item) => question(item, configForItem(active.config, item, active.index)).expected),
       ),
-    ].filter((value) => !isCorrect(current, active.config, value))
+    ].filter((value) => !isCorrect(current, cardConfig || active.config, value))
     return shuffle([prompt.expected, ...shuffle(alternatives).slice(0, 3)])
   }, [cardKey])
   const tokens = useMemo(
@@ -219,11 +230,8 @@ export default function Practice({
   const changeConfig = (change: Partial<Config>) => {
     setConfig(previous => {
       const next = { ...previous, ...change }
-      if (
-        next.content.length &&
-        !availableDirections(next.content).includes(next.direction)
-      )
-        next.direction = availableDirections(next.content)[0]
+      if (next.content.length && !flashcardDirections.includes(next.direction))
+        next.direction = flashcardDirections[0]
       return next
     })
   }
@@ -235,8 +243,17 @@ export default function Practice({
     } as Partial<Config>)
   const submit = (value = answer) => {
     if (!current || !active || feedback !== null) return
-    const correct = isCorrect(current, active.config, value)
+    const correct = isCorrect(current, cardConfig || active.config, value)
     if (recordAnswer(current.id, correct, retrying)) setFeedback(correct)
+  }
+  useEffect(() => {
+    if (!active || !current || !cardConfig || cardConfig.answerType !== "Sentence typing" || feedback !== null) return
+    const timer = window.setInterval(() => setElapsedSeconds(seconds => seconds + 1), 1000)
+    return () => window.clearInterval(timer)
+  }, [cardKey, cardConfig?.answerType, feedback])
+  const finishDrawing = () => {
+    if (!current || !active || !cardConfig || !drawingStrokes.length || feedback !== null) return
+    if (recordAnswer(current.id, true)) setFeedback(true)
   }
   const rateUnderstanding = (rating: Understanding) => {
     if (!current || feedback !== null) return
@@ -330,11 +347,12 @@ export default function Practice({
       }
       if (!state.active || !state.current || state.editing) return
       const choiceIndex = answerKeys.indexOf(key)
+      const activeCardConfig = state.active && state.current ? configForItem(state.active.config, state.current, state.active.index) : null
       if (choiceIndex !== -1 && state.feedback === null && state.active.config.mode !== "Sentence Formation") {
-        if (state.active.config.answerType === "Multiple Choice" && state.choices.length > 1 && state.choices[choiceIndex] !== undefined) {
+        if (activeCardConfig?.answerType === "Multiple Choice" && state.choices.length > 1 && state.choices[choiceIndex] !== undefined) {
           event.preventDefault()
           state.submit(state.choices[choiceIndex])
-        } else if (state.active.config.answerType === "Self Check") {
+        } else if (activeCardConfig?.answerType === "Self Check") {
           event.preventDefault()
           state.rateUnderstanding(selfRatings[choiceIndex].label)
         }
@@ -469,7 +487,7 @@ export default function Practice({
 
   if (active && current && prompt && !editing) {
     const sentence = active.config.mode === "Sentence Formation"
-    const answerType = sentence ? "Typing" : active.config.answerType
+    const answerType = sentence ? "Typing" : cardConfig?.answerType || active.config.answerType
     const progress = data.progress[current.id]
     return (
       <main className="workspace-page learning-page">
@@ -496,7 +514,7 @@ export default function Practice({
           <span>
             Card {active.index + 1} / {active.ids.length}
           </span>
-          <span>{active.config.direction}</span>
+          <span>{cardConfig?.direction}</span>
           <div>
             <span
               style={{ width: `${(active.index / active.ids.length) * 100}%` }}
@@ -529,9 +547,9 @@ export default function Practice({
             {sentence
               ? "Put the Japanese pieces in order."
               : active.config.mode === "Romaji Input" ||
-                  active.config.direction.endsWith("Romaji")
+                  cardConfig?.direction.endsWith("Romaji")
                 ? "Type the reading in romaji."
-                : active.config.direction.endsWith("English")
+                : cardConfig?.direction.endsWith("English")
                   ? "What does this mean?"
                   : "Write it in Japanese."}
           </p>
@@ -552,7 +570,27 @@ export default function Practice({
         </section>
         {feedback === null ? (
           <section className="learn-answer-area">
-            {sentence ? (
+            {answerType === "Drawing" ? (
+              <>
+                <p>Draw {current.japanese} in the correct stroke order.</p>
+                <HandwritingBoard
+                  character={current.japanese}
+                  geometry={[]}
+                  settings={data.preferences.writing || defaultWritingSettings}
+                  strokes={drawingStrokes}
+                  completed={false}
+                  onStroke={stroke => setDrawingStrokes(strokes => [...strokes, stroke])}
+                  onActive={() => undefined}
+                  onDone={finishDrawing}
+                />
+                <button className="wide-primary" disabled={!drawingStrokes.length} onClick={finishDrawing}>Evaluate drawing</button>
+              </>
+            ) : answerType === "Sentence typing" ? (
+              <form onSubmit={event => { event.preventDefault(); if (answer.trim()) submit() }}>
+                <label htmlFor="practice-answer">Type the sentence · {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, "0")} · {elapsedSeconds ? Math.round(answer.trim().length / 5 / (elapsedSeconds / 60)) : 0} WPM</label>
+                <div><input id="practice-answer" key={cardKey} autoFocus value={answer} onChange={event => setAnswer(event.target.value)} autoComplete="off" placeholder="Type the Japanese sentence..." /><button className="wide-primary" disabled={!answer.trim()}>Check</button></div>
+              </form>
+            ) : sentence ? (
               <>
                 <div
                   className="learn-sentence-answer"
@@ -641,7 +679,7 @@ export default function Practice({
                     autoComplete="off"
                     autoCapitalize="none"
                     placeholder={
-                      active.config.direction.endsWith("Romaji") ||
+                      cardConfig?.direction.endsWith("Romaji") ||
                       active.config.mode === "Romaji Input"
                         ? "Type the romaji..."
                         : "Type your answer..."
@@ -661,7 +699,7 @@ export default function Practice({
           >
             <h2>{typeof feedback === "string" ? `Understanding: ${feedback}` : feedback ? "✓ Correct!" : "× Not quite"}</h2>
             <HiddenAnswer visible={keyPeeking || pointerPeeking} onHold={holdAnswer} alwaysVisible={feedback === true}>
-            <small>{typeof feedback === "string" ? "Reference answer" : "Correct answer"}: {prompt.expected}</small>
+            <small>{`${typeof feedback === "string" ? "Reference answer" : "Correct answer"}: ${prompt.expected}`}</small>
             <strong lang="ja">{current.japanese}</strong>
             {current.reading !== current.japanese && (
               <span lang="ja">{current.reading}</span>
@@ -714,6 +752,10 @@ export default function Practice({
                 "Hiragana",
                 "Katakana",
                 "Kanji",
+                "Basics",
+                "Dakuon",
+                "Handakuon",
+                "Yoon",
                 ...config.writing.map(system => `${system} word`),
               ]}
               selected={config.content}
@@ -742,7 +784,7 @@ export default function Practice({
                     })
                   }
                 >
-                  {availableDirections(config.content).map((direction) => (
+                  {flashcardDirections.map((direction) => (
                     <option key={direction}>{direction}</option>
                   ))}
                 </select>
@@ -751,7 +793,7 @@ export default function Practice({
           {config.mode === "Flashcards" && (
             <Toggles
               title="Answer type"
-              options={["Multiple Choice", "Typing", "Self Check", "Randomize"]}
+              options={["Multiple Choice", "Typing", "Self Check", "Sentence typing", "Drawing", "Randomize"]}
               selected={[config.answerType]}
               onToggle={(option) =>
                 changeConfig({ answerType: option as AnswerType })
@@ -769,6 +811,16 @@ export default function Practice({
               />{" "}
               Needs review only
             </label>
+            {config.answerType === "Sentence typing" && (
+              <div className="learn-setup-options">
+                <label className="learn-field">Minimum words
+                  <input type="number" min="1" max="20" value={config.sentenceMinWords || 3} onChange={event => changeConfig({ sentenceMinWords: Math.max(1, Number(event.target.value)) })} />
+                </label>
+                <label className="learn-field">Maximum words
+                  <input type="number" min={config.sentenceMinWords || 3} max="30" value={config.sentenceMaxWords || 8} onChange={event => changeConfig({ sentenceMaxWords: Math.max(config.sentenceMinWords || 3, Number(event.target.value)) })} />
+                </label>
+              </div>
+            )}
             <label>
               <input
                 type="checkbox"
