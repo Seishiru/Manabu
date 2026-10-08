@@ -37,7 +37,11 @@ export const practiceItems: PracticeItem[] = dictionary.entries.map(entry => ({
   romaji: entry.romaji, meanings: entry.englishMeanings,
   level: entry.kind === "Hiragana" || entry.kind === "Katakana" ? "" : entry.jlpt.display,
   ...(entry.kind === "Hiragana" || entry.kind === "Katakana" ? { group: entry.group } : {}),
-  ...(entry.kind === "Words" ? { sentence: contentById.get(entry.exampleIds[0])?.japanese } : {}),
+  ...(entry.kind === "Words" ? {
+    sentence: contentById.get(entry.exampleIds[0])?.japanese,
+    sentenceReading: contentById.get(entry.exampleIds[0])?.kana,
+    sentenceRomaji: contentById.get(entry.exampleIds[0])?.romaji,
+  } : {}),
   ...(entry.kind === "Words" && entry.kanaReadings ? { readings: [...new Set([entry.romaji, ...entry.kanaReadings.filter(reading => !reading.noKanji && (!reading.spellingRestrictions.length || reading.spellingRestrictions.includes(entry.japanese))).map(reading => reading.romaji)])] } : {}),
   ...(entry.kind === "Kanji" ? { readings: [...entry.onReadings, ...entry.kunReadings].map(reading => reading.romaji) } : {}),
   ...(entry.kind === "Sentences" && entry.tokens ? { tokens: entry.tokens } : {}),

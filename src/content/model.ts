@@ -27,6 +27,8 @@ export type PracticeItem = {
   tokens?: string[]
   group?: "Basic" | "Dakuon" | "Handakuon" | "Yoon"
   sentence?: string
+  sentenceReading?: string
+  sentenceRomaji?: string
 }
 export type Source = {
   role?: string

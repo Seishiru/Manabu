@@ -4,6 +4,7 @@ import JapaneseKeyboard from "./JapaneseKeyboard"
 import { applyAppearance, defaultAppearance } from "./appearance"
 import { isKnownRoute, writingCharacterId } from "./navigation"
 import CharacterWriting from "./writing/CharacterWriting"
+import { APP_VERSION } from "./version"
 import ApplicationBoundary, { RecoveryPage } from "./Recovery"
 import { navigateTabs } from "./accessibility"
 import { kanaEntries } from "./content/catalog"
@@ -183,6 +184,7 @@ function Sidebar({
               : "Your next step starts here."}
           </small>
         </div>
+        <small className="app-version">Version {APP_VERSION}</small>
       </div>
     </aside>
   )

@@ -15,6 +15,7 @@ import { useOfflineStatus } from "./offline"
 import { dictionaryInfo } from "./content/catalog"
 import { strokeSource } from "./writing/model"
 import { defaultAppearance } from "./appearance"
+import { APP_VERSION } from "./version"
 
 export function RestoreControl({ onRestored }: { onRestored?: () => void }) {
   const [backup, setBackup] = useState<LearningState | null>(null)
@@ -419,6 +420,10 @@ export default function Settings() {
           <p>Your learning, your preferences.</p>
         </div>
       </header>
+      <section className="learn-panel">
+        <h2>Application</h2>
+        <div className="learn-preference"><span>Version</span><span className="dict-badge">{APP_VERSION}</span></div>
+      </section>
       <section className="learn-panel appearance-panel">
         <h2>Appearance</h2>
         <p className="learn-local-note">A comfortable space for every time of day.</p>

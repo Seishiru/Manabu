@@ -657,12 +657,19 @@ const romajiAnswers = (item: Item) =>
   ]
 export function question(item: Item, config: Config) {
   if (config.answerType === "Sentence typing")
-    return {
-      prompt: item.meanings[0],
-      accepted: [item.sentence || item.japanese],
-      expected: item.sentence || item.japanese,
-      hint: item.reading,
-    }
+    return config.direction === "Romaji → Japanese"
+      ? {
+          prompt: item.sentenceRomaji || item.romaji,
+          accepted: [item.sentence || item.japanese],
+          expected: item.sentence || item.japanese,
+          hint: item.sentenceReading || item.reading,
+        }
+      : {
+          prompt: item.sentence || item.japanese,
+          accepted: [item.sentenceRomaji || item.romaji],
+          expected: item.sentenceRomaji || item.romaji,
+          hint: item.sentenceReading || item.reading,
+        }
   if (config.mode === "Sentence Formation")
     return {
       prompt: item.meanings[0],

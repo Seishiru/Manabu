@@ -33,6 +33,7 @@ import {
 import { dictionaryManifest, randomDictionaryPracticeItems } from "./content/dictionarySearch"
 import HandwritingBoard from "./writing/HandwritingBoard"
 import type { InkStroke } from "./writing/model"
+import { romajiToKana, type Script } from "./keyboard"
 import { defaultWritingSettings } from "./writing/settings"
 
 const answerKeys = ["q", "w", "a", "s"]
@@ -199,6 +200,7 @@ export default function Practice({
   const [drawingStrokes, setDrawingStrokes] = useState<InkStroke[]>([])
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [typedCharacters, setTypedCharacters] = useState(0)
+  const [sentenceScript, setSentenceScript] = useState<Script>("Hiragana")
   const [completedPractice, setCompletedPractice] = useState<{
     config: Config
     ids: string[]
@@ -576,7 +578,9 @@ export default function Practice({
             }`}
             lang={/[一-龯ぁ-ヺ]/.test(prompt.prompt) ? "ja" : "en"}
           >
-            {prompt.prompt}
+            {/[一-龯]/.test(prompt.prompt) && prompt.hint
+              ? <><span className="learn-prompt-reading" lang="ja">{prompt.hint}</span>{prompt.prompt}</>
+              : prompt.prompt}
           </div>
           {hint && <p className="learn-hint">{prompt.hint}</p>}
           {!hint && feedback === null && (
@@ -604,10 +608,17 @@ export default function Practice({
               </>
             ) : answerType === "Sentence typing" ? (
               <form onSubmit={event => { event.preventDefault(); if (answer.trim()) submit() }}>
+                {cardConfig?.direction === "Romaji → Japanese" && (
+                  <div className="dict-tabs" role="group" aria-label="Sentence input script">
+                    {(["Hiragana", "Katakana"] as Script[]).map(script => (
+                      <button type="button" key={script} className={sentenceScript === script ? "active" : ""} aria-pressed={sentenceScript === script} onClick={() => setSentenceScript(script)}>{script}</button>
+                    ))}
+                  </div>
+                )}
                 <label htmlFor="practice-answer">
                   Type the sentence · {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, "0")} · Gross WPM: {elapsedSeconds ? Math.round((typedCharacters / 5) / (elapsedSeconds / 60)) : 0} · Net WPM: {elapsedSeconds ? Math.max(0, Math.round(((typedCharacters - editDistance(answer, prompt.expected)) / 5) / (elapsedSeconds / 60))) : 0}
                 </label>
-                <div><input id="practice-answer" key={cardKey} autoFocus value={answer} onChange={event => { const next = event.target.value; setTypedCharacters(total => total + Math.max(0, next.length - answer.length)); setAnswer(next) }} autoComplete="off" placeholder="Type the Japanese sentence..." /><button className="wide-primary" disabled={!answer.trim()}>Check</button></div>
+                <div><input id="practice-answer" key={cardKey} autoFocus value={answer} onChange={event => { const raw = event.target.value; const next = cardConfig?.direction === "Romaji → Japanese" ? romajiToKana(raw, sentenceScript) : raw; setTypedCharacters(total => total + Math.max(0, next.length - answer.length)); setAnswer(next) }} autoComplete="off" placeholder={cardConfig?.direction === "Romaji → Japanese" ? `Type romaji → ${sentenceScript.toLowerCase()}` : "Type the romaji sentence..."} /><button className="wide-primary" disabled={!answer.trim()}>Check</button></div>
               </form>
             ) : sentence ? (
               <>
