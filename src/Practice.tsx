@@ -38,6 +38,21 @@ import { defaultWritingSettings } from "./writing/settings"
 const answerKeys = ["q", "w", "a", "s"]
 const selfRatings = understandingRatings.map(label => ({ label }))
 const allPracticeLevels = ["N5", "N4", "N3", "N2", "N1", "Unclassified"]
+const editDistance = (left: string, right: string) => {
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index)
+  for (let row = 1; row <= left.length; row++) {
+    const current = [row]
+    for (let column = 1; column <= right.length; column++) {
+      current[column] = Math.min(
+        current[column - 1] + 1,
+        previous[column] + 1,
+        previous[column - 1] + Number(left[row - 1] !== right[column - 1]),
+      )
+    }
+    previous.splice(0, previous.length, ...current)
+  }
+  return previous[right.length]
+}
 
 function HiddenAnswer({ visible, onHold, children, alwaysVisible = false }: {
   visible: boolean
@@ -183,6 +198,7 @@ export default function Practice({
   const [dictionaryError, setDictionaryError] = useState<string | null>(null)
   const [drawingStrokes, setDrawingStrokes] = useState<InkStroke[]>([])
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  const [typedCharacters, setTypedCharacters] = useState(0)
   const [completedPractice, setCompletedPractice] = useState<{
     config: Config
     ids: string[]
@@ -198,6 +214,7 @@ export default function Practice({
     setPieces([])
     setDrawingStrokes([])
     setElapsedSeconds(0)
+    setTypedCharacters(0)
     setRetrying(false)
     setKeyPeeking(false)
     setPointerPeeking(false)
@@ -587,8 +604,10 @@ export default function Practice({
               </>
             ) : answerType === "Sentence typing" ? (
               <form onSubmit={event => { event.preventDefault(); if (answer.trim()) submit() }}>
-                <label htmlFor="practice-answer">Type the sentence · {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, "0")} · {elapsedSeconds ? Math.round(answer.trim().length / 5 / (elapsedSeconds / 60)) : 0} WPM</label>
-                <div><input id="practice-answer" key={cardKey} autoFocus value={answer} onChange={event => setAnswer(event.target.value)} autoComplete="off" placeholder="Type the Japanese sentence..." /><button className="wide-primary" disabled={!answer.trim()}>Check</button></div>
+                <label htmlFor="practice-answer">
+                  Type the sentence · {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, "0")} · Gross WPM: {elapsedSeconds ? Math.round((typedCharacters / 5) / (elapsedSeconds / 60)) : 0} · Net WPM: {elapsedSeconds ? Math.max(0, Math.round(((typedCharacters - editDistance(answer, prompt.expected)) / 5) / (elapsedSeconds / 60))) : 0}
+                </label>
+                <div><input id="practice-answer" key={cardKey} autoFocus value={answer} onChange={event => { const next = event.target.value; setTypedCharacters(total => total + Math.max(0, next.length - answer.length)); setAnswer(next) }} autoComplete="off" placeholder="Type the Japanese sentence..." /><button className="wide-primary" disabled={!answer.trim()}>Check</button></div>
               </form>
             ) : sentence ? (
               <>

@@ -30,6 +30,7 @@ export type Config = {
   sentenceMinWords?: number
   sentenceMaxWords?: number
   randomizeAnswerType?: boolean
+  randomSeed?: number
 }
 export type Profile = {
   name: string
@@ -314,7 +315,12 @@ function loadState(): LearningState {
         Number(active.index) < active.ids.length &&
         object(active.answers) &&
         Object.entries(active.answers).every(
-          ([id, answer]) => activeIds.includes(id) && (validated.practiceConfig.answerType === "Self Check" ? isUnderstanding(answer) : typeof answer === "boolean"),
+          ([id, answer]) => activeIds.includes(id) && (
+            validated.practiceConfig.randomizeAnswerType ||
+            validated.practiceConfig.answerType === "Self Check"
+              ? isUnderstanding(answer) || typeof answer === "boolean"
+              : typeof answer === "boolean"
+          ),
         ) &&
         stringArray(active.newItems) &&
         stringArray(active.retried) &&
@@ -462,6 +468,15 @@ export function beginSession(config: Config, ids?: string[]) {
         config.limit,
       )
   if (!deck.length) return false
+  if (sessionConfig.randomizeAnswerType && typeof window !== "undefined" && window.location.hostname === "localhost") {
+    console.debug(
+      "[Manabu] answer randomization",
+      { seed: sessionConfig.randomSeed, cards: deck.map((id, index) => {
+        const item = itemById(id)
+        return item ? { index, id, answerType: configForItem(sessionConfig, item, index).answerType } : null
+      }) },
+    )
+  }
   updateState({
     practiceConfig: sessionConfig,
     activeSession: {
@@ -491,19 +506,27 @@ export function resolvePracticeConfig(config: Config): Config {
       ? (["Typing", "Multiple Choice", "Self Check"] as AnswerType[])[Math.floor(Math.random() * 3)]
       : config.answerType,
     randomizeAnswerType: config.answerType === "Randomize",
+    randomSeed: config.randomSeed ?? Math.floor(Math.random() * 0x100000000),
   }
   return sessionConfig
 }
 const cardSeed = (id: string) => [...id].reduce((sum, character) => (sum * 31 + character.charCodeAt(0)) >>> 0, 7)
 export function configForItem(config: Config, item: Item, position = 0): Config {
-  const seed = cardSeed(item.id) + position
+  const seed = (cardSeed(item.id) + position + (config.randomSeed || 0)) >>> 0
   const directions = flashcardDirections
-  const answerTypes: AnswerType[] = ["Typing", "Multiple Choice", "Self Check", "Sentence typing"]
-  if (item.kind === "Hiragana" || item.kind === "Katakana") answerTypes.push("Drawing")
+  const answerTypes: AnswerType[] = ["Multiple Choice", "Typing", "Self Check"]
+  if (
+    (item.kind === "Hiragana" || item.kind === "Katakana") &&
+    ["Basic", "Dakuon", "Handakuon"].includes(item.group || "")
+  )
+    answerTypes.push("Drawing")
+  const answerType = config.randomizeAnswerType
+    ? answerTypes[seed % answerTypes.length]
+    : config.answerType
   return {
     ...config,
     direction: config.direction === "Randomize" ? directions[seed % directions.length] : config.direction,
-    answerType: config.randomizeAnswerType ? answerTypes[seed % answerTypes.length] : config.answerType,
+    answerType,
   }
 }
 export function registerDictionaryItems(entries: Item[]) {
